@@ -12,6 +12,7 @@ import 'dart:convert';
 
 enum ErrorAnimationProp { offset }
 
+//https://flutter.dev/docs/cookbook/navigation/passing-data
 class LoginForm extends StatefulWidget {
   static const String routeName = "/login";
 
@@ -53,14 +54,6 @@ class _LoginFormValidationState extends State<LoginForm> {
   void initState() {
     _passwordVisible = false;
     super.initState();
-  }
-
-  void httpJob(AnimationController controller) async {
-    controller.forward();
-    print("delay start");
-    await Future.delayed(Duration(seconds: 3), () {});
-    print("delay stop");
-    controller.reset();
   }
 
   @override
@@ -202,9 +195,7 @@ class _LoginFormValidationState extends State<LoginForm> {
                                 child: RaisedButton(
                                   onPressed: () {
                                     // ignore: unnecessary_statements
-                                    (AnimationController controller) async {
-                                      httpJob(controller);
-                                    };
+
                                     Constants.prefs!.setBool("LoggedIn", true);
                                     if (formkey.currentState!.validate()) {
                                       String _user =
@@ -212,6 +203,7 @@ class _LoginFormValidationState extends State<LoginForm> {
                                       String _pass =
                                           password.text.toString().trim();
                                       fetchdata(_user, _pass);
+
                                       print("Validated");
                                     } else {
                                       print("Not Validated");
@@ -270,6 +262,7 @@ class _LoginFormValidationState extends State<LoginForm> {
       'Cookie':
           'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
     };
+
     var request = http.Request('POST',
         Uri.parse('http://192.168.0.109:8000/api/method/salesman.api.login'));
     request.body = json.encode({"username": x, "password": y});
@@ -281,7 +274,8 @@ class _LoginFormValidationState extends State<LoginForm> {
       var res = await response.stream.bytesToString();
       Mapresponse = await json.decode(res);
       dataResponse = Mapresponse['login'];
-      print(dataResponse['api_key']);
+      var data = dataResponse['api_key'];
+      fetchparty(data, x, y);
       // print(await response.stream.bytesToString());
 
       // Another API call
@@ -323,40 +317,29 @@ class _LoginFormValidationState extends State<LoginForm> {
     //   //stringResponse = response.body;
     // });
   }
+
+  fetchparty(data, x, y) async {
+    var headers = {
+      'Authorization':
+          'token' + dataResponse['api_key'] + ':' + dataResponse['api_secret'],
+      'Content-Type': 'application/json',
+      'Cookie':
+          'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
+    };
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            'http://192.168.0.109:8000/api/method/salesman.api.store_info'));
+    request.body = json.encode({"username": x, "password": y});
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print("happy");
+      print(await response.stream.bytesToString());
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-// var headers = {
-//           'Authorization': 'token' +
-//               dataResponse['api_key'] +
-//               ':' +
-//               dataResponse['api_secret'],
-//           'Content-Type': 'application/json',
-//           'Cookie':
-//               'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
-//         };
-//         var request = http.Request(
-//             'GET',
-//             Uri.parse(
-//                 'http://192.168.0.109:8000/api/method/salesman.api.store_info'));
-//         request.body = json.encode({"username": x, "password": y});
-//         request.headers.addAll(headers);
-
-//         http.StreamedResponse response = await request.send();
-
-//         if (response.statusCode == 200) {
-//           print("happy");
-//           print(await response.stream.bytesToString());
-//         } else {
-//           print(response.reasonPhrase);
-//         }
