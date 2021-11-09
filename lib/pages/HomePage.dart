@@ -1,3 +1,6 @@
+import 'dart:io'; //InternetAddress utility
+import 'dart:async'; //For StreamController/Stream
+
 import 'package:flutter/material.dart';
 import 'package:flutter_salesman/Sub_pages/runrate.dart';
 import 'package:flutter_salesman/pages/LoginForm.dart';
@@ -323,7 +326,7 @@ class MyHomePage extends State<HomePage> {
     Placemark place = placemarks[0];
     setState(() {
       Address =
-          '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+          '${place.thoroughfare},${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     });
   }
 }
