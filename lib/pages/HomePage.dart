@@ -77,13 +77,13 @@ class MyHomePage extends State<HomePage> {
                 width: 120,
                 child: RaisedButton(
                   onPressed: () async {
-                    setState(() {
-                      _hasBeenPressed = false;
-                    });
                     Position position = await _getGeoLocationPosition();
 
                     _getCurrentLocation();
                     GetAddressFromLatLong(position);
+                    setState(() {
+                      _hasBeenPressed = false;
+                    });
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(80.0)),
