@@ -21,6 +21,7 @@ class MyHomePage extends State<HomePage> {
   //For GPS
   Position _currentPosition = Position();
   String _currentAddress = '';
+  String Address = '';
 
   //For button color change
   bool _hasBeenPressed = true;
@@ -72,12 +73,14 @@ class MyHomePage extends State<HomePage> {
               child: Container(
                 width: 120,
                 child: RaisedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     setState(() {
                       _hasBeenPressed = false;
                     });
-                    _getGeoLocationPosition();
+                    Position position = await _getGeoLocationPosition();
+
                     _getCurrentLocation();
+                    GetAddressFromLatLong(position);
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(80.0)),
@@ -238,7 +241,8 @@ class MyHomePage extends State<HomePage> {
                   ),
                 ),
               ),
-              if (_currentAddress != null) Text(_currentAddress),
+              //if (_currentAddress != null) Text(_currentAddress),
+              if (Address != null) Text(Address),
               if (_currentPosition != 'Hello')
                 Text(
                     "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
@@ -310,5 +314,16 @@ class MyHomePage extends State<HomePage> {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<void> GetAddressFromLatLong(Position position) async {
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    print(placemarks);
+    Placemark place = placemarks[0];
+    setState(() {
+      Address =
+          '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+    });
   }
 }
