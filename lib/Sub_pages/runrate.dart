@@ -28,10 +28,10 @@ class runrate extends StatelessWidget {
                 Container(
                   child: CircularPercentIndicator(
                       radius: 70,
-                      lineWidth: 8,
+                      lineWidth: 5.5,
                       backgroundColor: Colors.black54,
                       percent: 0.4,
-                      progressColor: Colors.amber,
+                      progressColor: Colors.white,
                       circularStrokeCap: CircularStrokeCap.round,
                       animation: true,
                       center: Text(
@@ -59,10 +59,10 @@ class runrate extends StatelessWidget {
                 Container(
                   child: CircularPercentIndicator(
                       radius: 70,
-                      lineWidth: 8,
+                      lineWidth: 5.5,
                       backgroundColor: Colors.black54,
                       percent: 0.6,
-                      progressColor: Colors.amber,
+                      progressColor: Colors.white,
                       circularStrokeCap: CircularStrokeCap.round,
                       animation: true,
                       center: Text(
@@ -90,7 +90,7 @@ class runrate extends StatelessWidget {
                 Container(
                   child: CircularPercentIndicator(
                       radius: 70,
-                      lineWidth: 8,
+                      lineWidth: 5.5,
                       backgroundColor: Colors.black54,
                       percent: 0.95,
                       progressColor: Colors.amber,
