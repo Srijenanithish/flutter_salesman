@@ -72,7 +72,7 @@ class MyHomePage extends State<HomePage> {
                     setState(() {
                       _hasBeenPressed = false;
                     });
-                    // _getCurrentLocation();
+                    _getCurrentLocation();
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(80.0)),
@@ -212,7 +212,7 @@ class MyHomePage extends State<HomePage> {
                                   Icons.streetview_outlined,
                                   color: Colors.black54,
                                 ),
-                                if (_currentPosition != null)
+                                if (_currentPosition != 'Hello')
                                   Text(
                                       "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
                                 Text(
