@@ -8,6 +8,7 @@ import 'package:flutter_salesman/main.dart';
 import 'package:swipebuttonflutter/swipebuttonflutter.dart';
 import '../Sub_pages/drawer.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 void main() => runApp(HomePage());
 
@@ -18,6 +19,7 @@ class HomePage extends StatefulWidget {
 
 class MyHomePage extends State<HomePage> {
   Position _currentPosition = Position();
+  String _currentAddress = '';
 
   bool _hasBeenPressed = true;
   @override
@@ -233,6 +235,7 @@ class MyHomePage extends State<HomePage> {
                   ),
                 ),
               ),
+              if (_currentAddress != null) Text(_currentAddress),
               if (_currentPosition != 'Hello')
                 Text(
                     "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
@@ -251,9 +254,26 @@ class MyHomePage extends State<HomePage> {
         .then((Position position) {
       setState(() {
         _currentPosition = position;
+        _getAddressFromLatLng();
       });
     }).catchError((e) {
       print(e);
     });
+  }
+
+  _getAddressFromLatLng() async {
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+          _currentPosition.latitude, _currentPosition.longitude);
+
+      Placemark place = placemarks[0];
+
+      setState(() {
+        _currentAddress =
+            "${place.locality}, ${place.postalCode}, ${place.country}";
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 }
