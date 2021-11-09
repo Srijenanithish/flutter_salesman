@@ -7,7 +7,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:flutter_salesman/main.dart';
 import 'package:swipebuttonflutter/swipebuttonflutter.dart';
 import '../Sub_pages/drawer.dart';
-// import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/geolocator.dart';
 
 void main() => runApp(HomePage());
 
@@ -17,7 +17,8 @@ class HomePage extends StatefulWidget {
 }
 
 class MyHomePage extends State<HomePage> {
-  //Position _currentPosition = 0.0 as Position;
+  Position _currentPosition = Position();
+
   bool _hasBeenPressed = true;
   @override
   Widget build(BuildContext context) {
@@ -211,9 +212,9 @@ class MyHomePage extends State<HomePage> {
                                   Icons.streetview_outlined,
                                   color: Colors.black54,
                                 ),
-                                // if (_currentPosition != null)
-                                //   Text(
-                                //       "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
+                                if (_currentPosition != null)
+                                  Text(
+                                      "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
                                 Text(
                                   'Territory 2',
                                   style: TextStyle(
@@ -243,16 +244,16 @@ class MyHomePage extends State<HomePage> {
     );
   }
 
-  // _getCurrentLocation() {
-  //   Geolocator.getCurrentPosition(
-  //           desiredAccuracy: LocationAccuracy.best,
-  //           forceAndroidLocationManager: true)
-  //       .then((Position position) {
-  //     setState(() {
-  //       _currentPosition = position;
-  //     });
-  //   }).catchError((e) {
-  //     print(e);
-  //   });
-  // }
+  _getCurrentLocation() {
+    Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.best,
+            forceAndroidLocationManager: true)
+        .then((Position position) {
+      setState(() {
+        _currentPosition = position;
+      });
+    }).catchError((e) {
+      print(e);
+    });
+  }
 }
