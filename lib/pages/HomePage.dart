@@ -322,7 +322,7 @@ class MyHomePage extends State<HomePage> {
   Future<void> GetAddressFromLatLong(Position position) async {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
-    print(placemarks);
+    //print(placemarks);
     Placemark place = placemarks[0];
     setState(() {
       Address =
