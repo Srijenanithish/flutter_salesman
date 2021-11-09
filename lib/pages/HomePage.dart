@@ -18,9 +18,11 @@ class HomePage extends StatefulWidget {
 }
 
 class MyHomePage extends State<HomePage> {
+  //For GPS
   Position _currentPosition = Position();
   String _currentAddress = '';
 
+  //For button color change
   bool _hasBeenPressed = true;
   @override
   Widget build(BuildContext context) {
@@ -247,6 +249,7 @@ class MyHomePage extends State<HomePage> {
     );
   }
 
+  //Function for Geolocation latitude and longitude
   _getCurrentLocation() {
     Geolocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.best,
@@ -261,6 +264,7 @@ class MyHomePage extends State<HomePage> {
     });
   }
 
+  //Function for Geolocation address
   _getAddressFromLatLng() async {
     try {
       List<Placemark> placemarks = await placemarkFromCoordinates(
