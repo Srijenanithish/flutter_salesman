@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.cyan,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Constants.prefs?.getBool("LoggedIn") == true
+      home: Constants.prefs?.getBool("LoggedIn") == false
           ? HomePage()
           : MyHomePage(),
     );
