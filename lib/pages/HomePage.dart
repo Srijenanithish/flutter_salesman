@@ -212,9 +212,6 @@ class MyHomePage extends State<HomePage> {
                                   Icons.streetview_outlined,
                                   color: Colors.black54,
                                 ),
-                                if (_currentPosition != 'Hello')
-                                  Text(
-                                      "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
                                 Text(
                                   'Territory 2',
                                   style: TextStyle(
@@ -236,6 +233,9 @@ class MyHomePage extends State<HomePage> {
                   ),
                 ),
               ),
+              if (_currentPosition != 'Hello')
+                Text(
+                    "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
             ],
           ),
         ]),
