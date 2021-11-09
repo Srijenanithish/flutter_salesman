@@ -1,0 +1,15 @@
+{
+
+    "version": "2.5.3",
+    "configurations": [
+            {
+                    "name": "SalesMan_App",
+                    "program": "lib/main.dart",
+                    "request": "launch",
+                    "type": "dart",
+                    "args": [
+                            "--no-sound-null-safety"
+                        ]
+            }
+    ]
+}
