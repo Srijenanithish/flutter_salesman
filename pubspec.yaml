@@ -36,7 +36,8 @@ dependencies:
   flappy_search_bar: ^1.4.1
   flashy_tab_bar: ^0.0.3
   http: ^0.13.2
-  
+  geocoding: ^1.0.5
+  geolocator: ^6.1.1
   
 
 dev_dependencies:

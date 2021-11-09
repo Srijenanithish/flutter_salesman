@@ -198,13 +198,18 @@ class _LoginFormValidationState extends State<LoginForm> {
 
                                     Constants.prefs!.setBool("LoggedIn", true);
                                     if (formkey.currentState!.validate()) {
-                                      String _user =
-                                          username.text.toString().trim();
-                                      String _pass =
-                                          password.text.toString().trim();
-                                      fetchdata(_user, _pass);
+                                      Navigator.of(context)
+                                          .pushNamed(HomePage.routeName)
+                                          .then((result) async {
+                                        print(result);
+                                      });
+                                      // String _user =
+                                      //     username.text.toString().trim();
+                                      // String _pass =
+                                      //     password.text.toString().trim();
+                                      // fetchdata(_user, _pass);
 
-                                      print("Validated");
+                                      // print("Validated");
                                     } else {
                                       print("Not Validated");
                                     }
