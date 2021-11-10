@@ -6,7 +6,6 @@ import 'package:flutter_salesman/Sub_pages/runrate.dart';
 import 'package:flutter_salesman/pages/LoginForm.dart';
 import 'package:flutter_salesman/pages/Territory1.dart';
 import 'package:flutter_salesman/pages/Territory2.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:flutter_salesman/main.dart';
 import 'package:swipebuttonflutter/swipebuttonflutter.dart';
@@ -37,8 +36,6 @@ class MyHomePage extends State<HomePage> {
         centerTitle: true,
         title: Text(
           "Salesman App",
-          style:
-              GoogleFonts.openSans(fontStyle: FontStyle.normal, fontSize: 16),
         ),
         //backgroundColor: Colors.transparent,
         flexibleSpace: Container(
@@ -120,19 +117,16 @@ class MyHomePage extends State<HomePage> {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.black,
-                                fontWeight: FontWeight.bold,
                               ),
                             )
                           : Text(
                               "Checked In",
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
+                              style: TextStyle(color: Colors.black),
                             ),
                     ),
                   ),
-                ), //557639
+                ),
               ),
             ),
           ),
@@ -178,7 +172,8 @@ class MyHomePage extends State<HomePage> {
                                 Text(
                                   'Territory 1',
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700,
                                     color: Colors.black,
                                   ),
                                 ),
@@ -235,7 +230,8 @@ class MyHomePage extends State<HomePage> {
                                 Text(
                                   'Territory 2',
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700,
                                     color: Colors.black,
                                   ),
                                 ),

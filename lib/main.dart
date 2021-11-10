@@ -15,7 +15,6 @@ import 'package:flutter_salesman/pages/Territory1.dart';
 import 'package:flutter_salesman/pages/Territory2.dart';
 import 'package:flutter_salesman/pages/itemdetails.dart';
 import 'package:flutter_salesman/utils/constants.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'pages/LoginForm.dart';
@@ -51,9 +50,6 @@ class MyApp extends StatelessWidget {
 
       title: 'Salesman App',
       theme: ThemeData(
-        textTheme: GoogleFonts.crimsonTextTextTheme(
-          Theme.of(context).textTheme,
-        ),
         primarySwatch: Colors.cyan,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
