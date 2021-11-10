@@ -22,6 +22,7 @@ class HomePage extends StatefulWidget {
 
 class MyHomePage extends State<HomePage> {
   //For GPS
+
   Position _currentPosition = Position();
   String _currentAddress = '';
   String Address = '';
