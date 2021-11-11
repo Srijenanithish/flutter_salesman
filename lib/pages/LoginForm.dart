@@ -282,12 +282,6 @@ class _LoginFormValidationState extends State<LoginForm> {
       Mapresponse = await json.decode(res);
       dataResponse = Mapresponse['login'];
       var data = dataResponse['api_key'];
-
-      // print(await response.stream.bytesToString());
-
-      // Another API call
-
-      // Ends
       Navigator.of(context).pushNamed(HomePage.routeName, arguments: {
         "Api_key": dataResponse['api_key'],
         "Api_secret": dataResponse['api_secret'],
