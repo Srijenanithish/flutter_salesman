@@ -8,15 +8,6 @@ class Territory1 extends StatefulWidget {
 }
 
 class MyTerritory1 extends State<Territory1> {
-  List<String> PartyList = [
-    'xyz garments',
-    'silver electronics',
-    'abc garments',
-    'jp paradise',
-    'hr stores',
-    'gee digitals',
-    'p party'
-  ];
   List<String> Partystatus = [
     'Order Taken',
     'Missing',
@@ -49,6 +40,20 @@ class MyTerritory1 extends State<Territory1> {
 
   @override
   Widget build(BuildContext context) {
+    final routes =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    //Pist = routes['Store_details'];
+    List<String> PartyList = [
+      'xyz garments',
+      'silver electronics',
+      'abc garments',
+      'jp paradise',
+      'hr stores',
+      'gee digitals',
+      'p party'
+    ];
+    //print(routes['Store_details'][0]);
+    // print(Pist);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue.shade300,

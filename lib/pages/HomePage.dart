@@ -28,6 +28,8 @@ class MyHomePage extends State<HomePage> {
   String _currentAddress = '';
   String Address = '';
 
+  Map Mapresponse = {};
+  Map dataResponse = {};
   //For button color change
   bool _hasBeenPressed = true;
   @override
@@ -147,9 +149,11 @@ class MyHomePage extends State<HomePage> {
                     width: 300,
                     child: RaisedButton(
                       onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed(Territory1.routeName)
-                            .then((result) {
+                        fetchparty(Api_key, Api_Secret, Username);
+                        Navigator.of(context).pushNamed(Territory1.routeName,
+                            arguments: {
+                              "Store_details": Mapresponse['Storedetails']
+                            }).then((result) {
                           print(result);
                         });
                       },
@@ -361,7 +365,12 @@ class MyHomePage extends State<HomePage> {
 
     if (response.statusCode == 200) {
       print("happy");
-      print(await response.stream.bytesToString());
+
+      var res = await response.stream.bytesToString();
+      Mapresponse = await json.decode(res);
+      // dataResponse = Mapresponse[0];
+      // // var data = dataResponse['customer_name'];
+      print(Mapresponse['store_details']);
     } else {
       print(response.reasonPhrase);
     }
