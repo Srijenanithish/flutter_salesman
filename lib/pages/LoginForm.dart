@@ -305,27 +305,5 @@ class _LoginFormValidationState extends State<LoginForm> {
       ));
       print(response.reasonPhrase);
     }
-
-    // print("hello");
-    // http.Response response;
-    // int _x = int.parse(x);
-    // int _y = int.parse(y);
-    // response = await http.get(Uri.parse(
-    //     'http://192.168.0.109:8000/api/method/salesman.api.login?username=${_x}&password=${_y}',
-    //     _x,
-    //     _y));
-
-    // if (response.statusCode == 200) {
-    //   print("hello..");
-    // Navigator.of(context).pushNamed(HomePage.routeName).then((result) {
-    //   print(result);
-    // });
-    // setState(() {
-    //   print("No");
-
-    //   Mapresponse = json.decode(response.body);
-    //   dataResponse = Mapresponse['login'];
-    //   //stringResponse = response.body;
-    // });
   }
 }
