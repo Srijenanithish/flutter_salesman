@@ -328,29 +328,4 @@ class _LoginFormValidationState extends State<LoginForm> {
     //   //stringResponse = response.body;
     // });
   }
-
-  fetchparty(x, y) async {
-    var headers = {
-      'Authorization': 'token' + x + ':' + y,
-      'Content-Type': 'application/json',
-      'Cookie':
-          'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
-    };
-
-    var request = http.Request(
-        'GET',
-        Uri.parse(
-            'http://192.168.0.109:8000/api/method/salesman.api.store_info'));
-    request.body = json.encode({"username": x, "password": y});
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      print("happy");
-      print(await response.stream.bytesToString());
-    } else {
-      print(response.reasonPhrase);
-    }
-  }
 }
