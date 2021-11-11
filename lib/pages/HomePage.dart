@@ -1,6 +1,7 @@
+import 'dart:convert';
 import 'dart:io'; //InternetAddress utility
 import 'dart:async'; //For StreamController/Stream
-
+import 'LoginForm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_salesman/Sub_pages/runrate.dart';
 import 'package:flutter_salesman/pages/LoginForm.dart';
@@ -12,6 +13,7 @@ import 'package:swipebuttonflutter/swipebuttonflutter.dart';
 import '../Sub_pages/drawer.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(HomePage());
 
@@ -22,7 +24,6 @@ class HomePage extends StatefulWidget {
 
 class MyHomePage extends State<HomePage> {
   //For GPS
-
   Position _currentPosition = Position();
   String _currentAddress = '';
   String Address = '';
@@ -31,6 +32,12 @@ class MyHomePage extends State<HomePage> {
   bool _hasBeenPressed = true;
   @override
   Widget build(BuildContext context) {
+    final routes =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    String Api_key = routes['Api_key'];
+    String Api_Secret = routes['Api_secret'];
+    String Username = routes['Username'];
+
     var child;
     return Scaffold(
       appBar: AppBar(
@@ -80,8 +87,8 @@ class MyHomePage extends State<HomePage> {
                 width: 120,
                 child: RaisedButton(
                   onPressed: () async {
+                    fetchparty(Api_key, Api_Secret, Username);
                     Position position = await _getGeoLocationPosition();
-
                     _getCurrentLocation();
                     GetAddressFromLatLong(position);
                     setState(() {
@@ -333,5 +340,30 @@ class MyHomePage extends State<HomePage> {
       Address =
           '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     });
+  }
+
+  fetchparty(x, y, z) async {
+    var headers = {
+      'Authorization': 'token ' + x + ':' + y,
+      'Content-Type': 'application/json',
+      'Cookie':
+          'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
+    };
+
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            'http://192.168.0.109:8000/api/method/salesman.api.store_info'));
+    request.body = json.encode({"username": z});
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print("happy");
+      print(await response.stream.bytesToString());
+    } else {
+      print(response.reasonPhrase);
+    }
   }
 }

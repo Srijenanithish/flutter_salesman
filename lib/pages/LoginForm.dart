@@ -198,18 +198,19 @@ class _LoginFormValidationState extends State<LoginForm> {
 
                                     Constants.prefs!.setBool("LoggedIn", true);
                                     if (formkey.currentState!.validate()) {
-                                      Navigator.of(context)
-                                          .pushNamed(HomePage.routeName)
-                                          .then((result) async {
-                                        print(result);
-                                      });
-                                      // String _user =
-                                      //     username.text.toString().trim();
-                                      // String _pass =
-                                      //     password.text.toString().trim();
-                                      // fetchdata(_user, _pass);
+                                      // Navigator.of(context)
+                                      //     .pushNamed(HomePage.routeName)
+                                      //     .then((result) async {
+                                      //   print(result);
+                                      // });
 
-                                      // print("Validated");
+                                      String _user =
+                                          username.text.toString().trim();
+                                      String _pass =
+                                          password.text.toString().trim();
+                                      fetchdata(_user, _pass);
+
+                                      print("Validated");
                                     } else {
                                       print("Not Validated");
                                     }
@@ -261,7 +262,7 @@ class _LoginFormValidationState extends State<LoginForm> {
     );
   }
 
-  fetchdata(x, y) async {
+  void fetchdata(x, y) async {
     var headers = {
       'Content-Type': 'application/json',
       'Cookie':
@@ -271,6 +272,7 @@ class _LoginFormValidationState extends State<LoginForm> {
     var request = http.Request('POST',
         Uri.parse('http://192.168.0.109:8000/api/method/salesman.api.login'));
     request.body = json.encode({"username": x, "password": y});
+
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
@@ -280,13 +282,17 @@ class _LoginFormValidationState extends State<LoginForm> {
       Mapresponse = await json.decode(res);
       dataResponse = Mapresponse['login'];
       var data = dataResponse['api_key'];
-      fetchparty(data, x, y);
+
       // print(await response.stream.bytesToString());
 
       // Another API call
 
       // Ends
-      Navigator.of(context).pushNamed(HomePage.routeName).then((result) async {
+      Navigator.of(context).pushNamed(HomePage.routeName, arguments: {
+        "Api_key": dataResponse['api_key'],
+        "Api_secret": dataResponse['api_secret'],
+        "Username": x
+      }).then((result) async {
         print(result);
       });
     } else {
@@ -323,14 +329,14 @@ class _LoginFormValidationState extends State<LoginForm> {
     // });
   }
 
-  fetchparty(data, x, y) async {
+  fetchparty(x, y) async {
     var headers = {
-      'Authorization':
-          'token' + dataResponse['api_key'] + ':' + dataResponse['api_secret'],
+      'Authorization': 'token' + x + ':' + y,
       'Content-Type': 'application/json',
       'Cookie':
           'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
     };
+
     var request = http.Request(
         'GET',
         Uri.parse(
