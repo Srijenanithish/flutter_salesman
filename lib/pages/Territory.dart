@@ -42,16 +42,28 @@ class MyTerritory1 extends State<Territory1> {
   Widget build(BuildContext context) {
     final routes =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    //print(routes['Store_details']);
+    List l = routes['Store_details'];
+    print(l[0]);
     //Pist = routes['Store_details'];
-    List<String> PartyList = [
-      'xyz garments',
-      'silver electronics',
-      'abc garments',
-      'jp paradise',
-      'hr stores',
-      'gee digitals',
-      'p party'
-    ];
+    List<String> PartyList = [];
+    for (var i = 0; i < l.length; i++) {
+      PartyList.add(l[i]['customer_name']);
+    }
+    List<String> Location = [];
+    for (var i = 0; i < l.length; i++) {
+      Location.add(l[i]['territory']);
+    }
+
+    // List<String> PartyList = [
+    //   'xyz garments',
+    //   'silver electronics',
+    //   'abc garments',
+    //   'jp paradise',
+    //   'hr stores',
+    //   'gee digitals',
+    //   'p party'
+    // ];
     //print(routes['Store_details'][0]);
     // print(Pist);
     return Scaffold(

@@ -11,7 +11,7 @@ import 'package:flutter_salesman/pages/Party1.dart';
 import 'package:flutter_salesman/pages/Party2.dart';
 import 'package:flutter_salesman/pages/Previousorders.dart';
 import 'package:flutter_salesman/pages/Takeorder.dart';
-import 'package:flutter_salesman/pages/Territory1.dart';
+import 'package:flutter_salesman/pages/Territory.dart';
 import 'package:flutter_salesman/pages/Territory2.dart';
 import 'package:flutter_salesman/pages/itemdetails.dart';
 import 'package:flutter_salesman/utils/constants.dart';

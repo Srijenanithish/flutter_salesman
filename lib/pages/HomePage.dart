@@ -5,7 +5,7 @@ import 'LoginForm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_salesman/Sub_pages/runrate.dart';
 import 'package:flutter_salesman/pages/LoginForm.dart';
-import 'package:flutter_salesman/pages/Territory1.dart';
+import 'package:flutter_salesman/pages/Territory.dart';
 import 'package:flutter_salesman/pages/Territory2.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:flutter_salesman/main.dart';
@@ -147,119 +147,11 @@ class MyHomePage extends State<HomePage> {
                 child: Center(
                   child: Container(
                     width: 300,
-                    child: RaisedButton(
-                      onPressed: () {
-                        fetchparty(Api_key, Api_Secret, Username);
-                        Navigator.of(context).pushNamed(Territory1.routeName,
-                            arguments: {
-                              "Store_details": Mapresponse['Storedetails']
-                            }).then((result) {
-                          print(result);
-                        });
-                      },
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(80.0)),
-                      padding: EdgeInsets.all(0.0),
-                      child: Ink(
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.white, Colors.cyan.shade100],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                            borderRadius: BorderRadius.circular(30.0)),
-                        child: Container(
-                          constraints:
-                              BoxConstraints(maxWidth: 300.0, minHeight: 50.0),
-                          alignment: Alignment.center,
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(15, 10, 10, 15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Icon(
-                                  Icons.streetview_outlined,
-                                  color: Colors.black54,
-                                ),
-                                Text(
-                                  'Territory 1',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.arrow_forward,
-                                  color: Colors.pink,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    child: getForm(),
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child: Center(
-                  child: Container(
-                    width: 300,
-                    child: RaisedButton(
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed(Territory2.routeName)
-                            .then((result) {
-                          print(result);
-                        });
-                      },
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(80.0)),
-                      padding: EdgeInsets.all(0.0),
-                      child: Ink(
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.white, Colors.cyan.shade100],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                            borderRadius: BorderRadius.circular(30.0)),
-                        child: Container(
-                          constraints:
-                              BoxConstraints(maxWidth: 300.0, minHeight: 50.0),
-                          alignment: Alignment.center,
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(15, 10, 10, 15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Icon(
-                                  Icons.streetview_outlined,
-                                  color: Colors.black54,
-                                ),
-                                Text(
-                                  'Territory 2',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.arrow_forward,
-                                  color: Colors.pink,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+
               //if (_currentAddress != null) Text(_currentAddress),
               if (Address != null) Text(Address),
               if (_currentPosition != 'Hello')
@@ -374,5 +266,87 @@ class MyHomePage extends State<HomePage> {
     } else {
       print(response.reasonPhrase);
     }
+  }
+
+  getForm() {
+    List dataSet = Mapresponse['store_details'];
+    List<Widget> fieldList = [];
+    for (var i = 0; i < dataSet.length; i++) {
+      fieldList.add(getButton(dataSet[i], dataSet));
+    }
+    // return getField(dataSet);
+    return Container(
+      margin: EdgeInsets.only(top: 20.0),
+      padding: EdgeInsets.all(12.0),
+      decoration: BoxDecoration(
+          color: Colors.transparent,
+          border: Border.all(
+              color: Colors.blueGrey.shade100, style: BorderStyle.solid),
+          borderRadius: BorderRadius.circular(12.0)),
+      child: Column(
+        children: fieldList,
+      ),
+    );
+  }
+
+  // fieldMapper(data) {
+  //   String type = data['Territory_name'].toString();
+  //   if (type == 'Dat || type == 'Float') {
+  //     return getButton();
+  //   }
+  // }
+
+  Widget getButton(name, list0) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: RaisedButton(
+        onPressed: () {
+          Navigator.of(context).pushNamed(Territory1.routeName,
+              arguments: {"Store_details": list0}).then((result) {
+            print(result);
+          });
+        },
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
+        padding: EdgeInsets.all(0.0),
+        child: Ink(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.white, Colors.cyan.shade100],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              borderRadius: BorderRadius.circular(30.0)),
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 300.0, minHeight: 50.0),
+            alignment: Alignment.center,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(15, 10, 10, 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(
+                    Icons.streetview_outlined,
+                    color: Colors.black54,
+                  ),
+                  Text(
+                    name['territory'],
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Icon(
+                    Icons.arrow_forward,
+                    color: Colors.pink,
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
