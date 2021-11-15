@@ -23,6 +23,16 @@ class HomePage extends StatefulWidget {
 }
 
 class MyHomePage extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(
+        Duration(seconds: 7),
+        () => Container(
+            color: Colors.white,
+            child: Image.asset("assets/login/screen.gif")));
+  }
+
   //For GPS
   Position _currentPosition = Position();
   String _currentAddress = '';
@@ -329,7 +339,7 @@ class MyHomePage extends State<HomePage> {
     var request = http.Request(
         'GET',
         Uri.parse(
-            'http://192.168.0.109:8000/api/method/salesman.api.store_info'));
+            'http://test-sfa.aerele.in/api/method/salesman.api.store_info'));
     request.body = json.encode({"username": z});
     request.headers.addAll(headers);
 
@@ -353,7 +363,7 @@ class MyHomePage extends State<HomePage> {
     var request = http.Request(
         'GET',
         Uri.parse(
-            'http://192.168.0.109:8000/api/method/salesman.api.check_in?lat=11.116612727201764&lon=77.37256945162726'));
+            'http://test-sfa.aerele.in/api/method/salesman.api.check_in?lat=11.116612727201764&lon=77.37256945162726'));
     request.body = json.encode({"lat": lat, "lon": lon});
     request.headers.addAll(headers);
 
