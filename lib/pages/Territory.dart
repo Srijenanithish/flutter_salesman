@@ -44,7 +44,7 @@ class MyTerritory1 extends State<Territory1> {
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     //print(routes['Store_details']);
     List l = routes['Store_details'];
-    print(l[0]);
+    //print(l);
     //Pist = routes['Store_details'];
     List<String> PartyList = [];
     for (var i = 0; i < l.length; i++) {

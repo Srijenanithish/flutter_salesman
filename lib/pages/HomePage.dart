@@ -30,8 +30,11 @@ class MyHomePage extends State<HomePage> {
 
   Map Mapresponse = {};
   Map dataResponse = {};
+  Map Mapresponse_ = {};
+  Map dataResponse_ = {};
   //For button color change
   bool _hasBeenPressed = true;
+  bool hasBeenPressed = true;
   @override
   Widget build(BuildContext context) {
     final routes =
@@ -82,73 +85,150 @@ class MyHomePage extends State<HomePage> {
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 280, 0, 0),
-            child: Center(
-              child: Container(
-                width: 120,
-                child: RaisedButton(
-                  onPressed: () async {
-                    fetchparty(Api_key, Api_Secret, Username);
-                    Position position = await _getGeoLocationPosition();
-                    _getCurrentLocation();
-                    GetAddressFromLatLong(position);
-                    setState(() {
-                      _hasBeenPressed = false;
-                    });
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(80.0)),
-                  padding: EdgeInsets.all(0.0),
-                  textColor: Colors.white,
-                  child: Ink(
-                    decoration: _hasBeenPressed
-                        ? BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Color(0xFFFF9520), Color(0xFFFF6F00)],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                            borderRadius: BorderRadius.circular(30.0))
-                        : BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.lightBlue, Colors.lightGreen],
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                            ),
-                            borderRadius: BorderRadius.circular(30.0)),
+          Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 280, 0, 0),
+                  child: Center(
                     child: Container(
-                      constraints:
-                          BoxConstraints(maxWidth: 120.0, minHeight: 50.0),
-                      alignment: Alignment.center,
-                      child: _hasBeenPressed
-                          ? Text(
-                              "Check In",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),
-                            )
-                          : Text(
-                              "Checked In",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.black),
-                            ),
+                      width: 120,
+                      child: RaisedButton(
+                        onPressed: () async {
+                          Position position = await _getGeoLocationPosition();
+                          await _getCurrentLocation();
+                          await GetAddressFromLatLong(position);
+                          await fetchLocation(_currentPosition.latitude,
+                              _currentPosition.longitude);
+                          setState(() {
+                            _hasBeenPressed = false;
+                          });
+                        },
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(80.0)),
+                        padding: EdgeInsets.all(0.0),
+                        textColor: Colors.white,
+                        child: Ink(
+                          decoration: _hasBeenPressed
+                              ? BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color(0xFFFF9520),
+                                      Color(0xFFFF6F00)
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(30.0))
+                              : BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.lightBlue,
+                                      Colors.lightGreen
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(30.0)),
+                          child: Container(
+                            constraints: BoxConstraints(
+                                maxWidth: 120.0, minHeight: 50.0),
+                            alignment: Alignment.center,
+                            child: _hasBeenPressed
+                                ? Text(
+                                    "Check In",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  )
+                                : Text(
+                                    "Checked In",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 280, 0, 0),
+                  child: Center(
+                    child: Container(
+                      width: 120,
+                      child: RaisedButton(
+                        onPressed: () async {
+                          await fetchparty(Api_key, Api_Secret, Username);
+                          setState(() {
+                            hasBeenPressed = false;
+                          });
+                        },
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(80.0)),
+                        padding: EdgeInsets.all(0.0),
+                        textColor: Colors.white,
+                        child: Ink(
+                          decoration: hasBeenPressed
+                              ? BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color(0xFFFF9520),
+                                      Color(0xFFFF6F00)
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(30.0))
+                              : BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.lightBlue,
+                                      Colors.lightGreen
+                                    ],
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                  ),
+                                  borderRadius: BorderRadius.circular(30.0)),
+                          child: Container(
+                            constraints: BoxConstraints(
+                                maxWidth: 120.0, minHeight: 50.0),
+                            alignment: Alignment.center,
+                            child: hasBeenPressed
+                                ? Text(
+                                    "Get Territory",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  )
+                                : Text(
+                                    "Get Territory",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
           Column(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 400, 0, 0),
+                padding: const EdgeInsets.fromLTRB(0, 350, 0, 0),
                 child: Center(
                   child: Container(
-                    width: 300,
-                    child: getForm(),
-                  ),
+                      width: 300,
+                      child: _hasBeenPressed ? getForm() : getForm()),
                 ),
               ),
 
@@ -262,33 +342,59 @@ class MyHomePage extends State<HomePage> {
       Mapresponse = await json.decode(res);
       // dataResponse = Mapresponse[0];
       // // var data = dataResponse['customer_name'];
-      print(Mapresponse['store_details']);
+      //print(Mapresponse);
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
+  fetchLocation(lat, lon) async {
+    var headers = {'Content-Type': 'application/json', 'Cookie': 'sid=Guest'};
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            'http://192.168.0.109:8000/api/method/salesman.api.check_in?lat=11.116612727201764&lon=77.37256945162726'));
+    request.body = json.encode({"lat": lat, "lon": lon});
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var Respon = await response.stream.bytesToString();
+      Mapresponse_ = await json.decode(Respon);
+      print(Respon);
     } else {
       print(response.reasonPhrase);
     }
   }
 
   getForm() {
-    List dataSet = Mapresponse['store_details'];
-    List<Widget> fieldList = [];
-    for (var i = 0; i < dataSet.length; i++) {
-      fieldList.add(getButton(dataSet[i], dataSet));
+    if (Mapresponse['territory_name'] == null) {
+      return Container(
+          child:
+              Image.asset("assets/login/territory.gif", height: 50, width: 50));
+    } else {
+      List dataSet = Mapresponse['territory_name'];
+      List storeset = Mapresponse['store_details'];
+      List<Widget> fieldList = [];
+      for (var i = 0; i < dataSet.length; i++) {
+        fieldList.add(getButton(dataSet[i], storeset[i]));
+      }
+      // return getField(dataSet);
+      return Container(
+        margin: EdgeInsets.only(top: 20.0),
+        padding: EdgeInsets.all(12.0),
+        decoration: BoxDecoration(
+            color: Colors.transparent,
+            border: Border.all(
+                color: Colors.blueGrey.shade100, style: BorderStyle.solid),
+            borderRadius: BorderRadius.circular(12.0)),
+        child: Column(
+          children: fieldList,
+        ),
+      );
     }
-    // return getField(dataSet);
-    return Container(
-      margin: EdgeInsets.only(top: 20.0),
-      padding: EdgeInsets.all(12.0),
-      decoration: BoxDecoration(
-          color: Colors.transparent,
-          border: Border.all(
-              color: Colors.blueGrey.shade100, style: BorderStyle.solid),
-          borderRadius: BorderRadius.circular(12.0)),
-      child: Column(
-        children: fieldList,
-      ),
-    );
   }
-
   // fieldMapper(data) {
   //   String type = data['Territory_name'].toString();
   //   if (type == 'Dat || type == 'Float') {
@@ -301,6 +407,7 @@ class MyHomePage extends State<HomePage> {
       padding: const EdgeInsets.all(8.0),
       child: RaisedButton(
         onPressed: () {
+          print(list0);
           Navigator.of(context).pushNamed(Territory1.routeName,
               arguments: {"Store_details": list0}).then((result) {
             print(result);
@@ -330,7 +437,7 @@ class MyHomePage extends State<HomePage> {
                     color: Colors.black54,
                   ),
                   Text(
-                    name['territory'],
+                    name,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
