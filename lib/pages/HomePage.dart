@@ -111,9 +111,17 @@ class MyHomePage extends State<HomePage> {
                           await GetAddressFromLatLong(position);
                           await fetchLocation(_currentPosition.latitude,
                               _currentPosition.longitude);
-                          setState(() {
-                            _hasBeenPressed = false;
-                          });
+                          _hasBeenPressed
+                              ? showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      _buildPopupDialog(context),
+                                )
+                              : showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      _build_Popup_Dialog(context),
+                                );
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(80.0)),
@@ -386,9 +394,12 @@ class MyHomePage extends State<HomePage> {
     } else {
       List dataSet = Mapresponse['territory_name'];
       List storeset = Mapresponse['store_details'];
+      print(Mapresponse['store_details']);
+      //print(storeset);
       List<Widget> fieldList = [];
       for (var i = 0; i < dataSet.length; i++) {
         fieldList.add(getButton(dataSet[i], storeset[i]));
+        //print(storeset[i]);
       }
       // return getField(dataSet);
       return Container(
@@ -466,6 +477,68 @@ class MyHomePage extends State<HomePage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildPopupDialog(BuildContext context) {
+    return new AlertDialog(
+      title: Center(child: const Text('Confirm to give an Attendance')),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(32.0))),
+      contentPadding: EdgeInsets.only(top: 10.0),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Center(child: Text("By Clicking Yes")),
+        ],
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            setState(() {
+              _hasBeenPressed = true;
+            });
+            Navigator.of(context).pop();
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('No', style: TextStyle(fontSize: 18)),
+        ),
+        new FlatButton(
+          onPressed: () {
+            setState(() {
+              _hasBeenPressed = false;
+            });
+            Navigator.of(context).pop(context);
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('Yes', style: TextStyle(fontSize: 18)),
+        ),
+      ],
+    );
+  }
+
+  Widget _build_Popup_Dialog(BuildContext context) {
+    return new AlertDialog(
+      title: Center(child: const Text('You have Already Checked In')),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(32.0))),
+      contentPadding: EdgeInsets.only(top: 10.0),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+      ),
+      actions: <Widget>[
+        Center(
+          child: new FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop(context);
+            },
+            textColor: Theme.of(context).primaryColor,
+            child: const Text('Okay', style: TextStyle(fontSize: 18)),
+          ),
+        ),
+      ],
     );
   }
 }

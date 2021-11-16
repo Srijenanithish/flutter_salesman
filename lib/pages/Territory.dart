@@ -34,7 +34,7 @@ class MyTerritory1 extends State<Territory1> {
   Widget build(BuildContext context) {
     final routes =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    //print(routes['Store_details']);
+
     List l = routes['Store_details'];
     String tet = routes['Territory_Name'];
     List<String> PartyList = [];
@@ -46,17 +46,6 @@ class MyTerritory1 extends State<Territory1> {
       Location.add(l[i]['territory']);
     }
 
-    // List<String> PartyList = [
-    //   'xyz garments',
-    //   'silver electronics',
-    //   'abc garments',
-    //   'jp paradise',
-    //   'hr stores',
-    //   'gee digitals',
-    //   'p party'
-    // ];
-    //print(routes['Store_details'][0]);
-    // print(Pist);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue.shade300,
@@ -106,8 +95,8 @@ class MyTerritory1 extends State<Territory1> {
                     contentPadding: EdgeInsets.all(20)),
                 onChanged: (value) {
                   setState(() {
-                    PartyListSearch = PartyList.where(
-                            (element) => element.contains(value.toLowerCase()))
+                    PartyListSearch = PartyList.where((element) =>
+                            element.toLowerCase().contains(value.toLowerCase()))
                         .toList();
                     if (PartyList.isNotEmpty && PartyListSearch?.length == 0) {
                       print('Partylist length ${PartyListSearch?.length}');
@@ -124,8 +113,6 @@ class MyTerritory1 extends State<Territory1> {
                   itemBuilder: (ctx, index) {
                     return InkWell(
                       onTap: () {
-                        print([l[index]]);
-                        sendList();
                         Navigator.of(context)
                             .pushNamed(Party1.routeName, arguments: {
                           "Store_detail": [l[index]],
@@ -193,6 +180,4 @@ class MyTerritory1 extends State<Territory1> {
       ),
     );
   }
-
-  sendList() {}
 }
