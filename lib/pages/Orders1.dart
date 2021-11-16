@@ -97,8 +97,8 @@ class MyOrders1 extends State<Orders1> {
                     contentPadding: EdgeInsets.all(20)),
                 onChanged: (value) {
                   setState(() {
-                    PartyListSearch = PartyList.where(
-                            (element) => element.contains(value.toLowerCase()))
+                    PartyListSearch = PartyList.where((element) =>
+                            element.toLowerCase().contains(value.toLowerCase()))
                         .toList();
                     if (PartyList.isNotEmpty && PartyListSearch?.length == 0) {
                       print('Partylist length ${PartyListSearch?.length}');

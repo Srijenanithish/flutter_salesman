@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_salesman/Sub_pages/runrate.dart';
 import 'package:flutter_salesman/pages/LoginForm.dart';
 import 'package:flutter_salesman/pages/Territory.dart';
-
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:flutter_salesman/main.dart';
 import 'package:swipebuttonflutter/swipebuttonflutter.dart';
@@ -110,7 +109,7 @@ class MyHomePage extends State<HomePage> {
                           await _getCurrentLocation();
                           await GetAddressFromLatLong(position);
                           await fetchLocation(_currentPosition.latitude,
-                              _currentPosition.longitude);
+                              _currentPosition.longitude, Username);
                           _hasBeenPressed
                               ? showDialog(
                                   context: context,
@@ -328,7 +327,7 @@ class MyHomePage extends State<HomePage> {
   Future<void> GetAddressFromLatLong(Position position) async {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
-    //print(placemarks);
+
     Placemark place = placemarks[0];
     setState(() {
       Address =
@@ -354,25 +353,23 @@ class MyHomePage extends State<HomePage> {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      print("happy");
+      print("Got Territories");
 
       var res = await response.stream.bytesToString();
       Mapresponse = await json.decode(res);
-      // dataResponse = Mapresponse[0];
-      // // var data = dataResponse['customer_name'];
-      //print(Mapresponse);
+      print(Mapresponse);
     } else {
       print(response.reasonPhrase);
     }
   }
 
-  fetchLocation(lat, lon) async {
+  fetchLocation(lat, lon, user) async {
     var headers = {'Content-Type': 'application/json', 'Cookie': 'sid=Guest'};
     var request = http.Request(
         'GET',
         Uri.parse(
             'http://test-sfa.aerele.in/api/method/salesman.api.check_in?lat=11.116612727201764&lon=77.37256945162726'));
-    request.body = json.encode({"lat": lat, "lon": lon});
+    request.body = json.encode({"lat": lat, "lon": lon, "username": user});
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
@@ -380,7 +377,6 @@ class MyHomePage extends State<HomePage> {
     if (response.statusCode == 200) {
       var Respon = await response.stream.bytesToString();
       Mapresponse_ = await json.decode(Respon);
-      print(Respon);
     } else {
       print(response.reasonPhrase);
     }
@@ -389,19 +385,17 @@ class MyHomePage extends State<HomePage> {
   getForm() {
     if (Mapresponse['territory_name'] == null) {
       return Container(
-          child:
-              Image.asset("assets/login/territory.gif", height: 50, width: 50));
+          child: Image.asset("assets/login/Safe_Ride.png",
+              height: 250, width: 250));
     } else {
       List dataSet = Mapresponse['territory_name'];
       List storeset = Mapresponse['store_details'];
-      print(Mapresponse['store_details']);
-      //print(storeset);
+
       List<Widget> fieldList = [];
       for (var i = 0; i < dataSet.length; i++) {
         fieldList.add(getButton(dataSet[i], storeset[i]));
-        //print(storeset[i]);
       }
-      // return getField(dataSet);
+
       return Container(
         margin: EdgeInsets.only(top: 20.0),
         padding: EdgeInsets.all(12.0),
@@ -428,10 +422,11 @@ class MyHomePage extends State<HomePage> {
       padding: const EdgeInsets.all(8.0),
       child: RaisedButton(
         onPressed: () {
-          print(list0);
-          Navigator.of(context).pushNamed(Territory1.routeName, arguments: {
+          Navigator.of(context).pushNamed(Territory.routeName, arguments: {
             "Store_details": list0,
-            "Territory_Name": name
+            "Territory_Name": name,
+            "lat": _currentPosition.latitude,
+            "lon": _currentPosition.longitude
           }).then((result) {
             print(result);
           });
@@ -494,25 +489,41 @@ class MyHomePage extends State<HomePage> {
         ],
       ),
       actions: <Widget>[
-        new FlatButton(
-          onPressed: () {
-            setState(() {
-              _hasBeenPressed = true;
-            });
-            Navigator.of(context).pop();
-          },
-          textColor: Theme.of(context).primaryColor,
-          child: const Text('No', style: TextStyle(fontSize: 18)),
-        ),
-        new FlatButton(
-          onPressed: () {
-            setState(() {
-              _hasBeenPressed = false;
-            });
-            Navigator.of(context).pop(context);
-          },
-          textColor: Theme.of(context).primaryColor,
-          child: const Text('Yes', style: TextStyle(fontSize: 18)),
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(40, 0, 8, 0),
+              child: Center(
+                child: new FlatButton(
+                  color: Colors.cyan.shade50,
+                  onPressed: () {
+                    setState(() {
+                      _hasBeenPressed = false;
+                    });
+                    Navigator.of(context).pop(context);
+                  },
+                  textColor: Theme.of(context).primaryColor,
+                  child: const Text('Yes', style: TextStyle(fontSize: 18)),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: new FlatButton(
+                  color: Colors.cyan.shade50,
+                  onPressed: () {
+                    setState(() {
+                      _hasBeenPressed = true;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  textColor: Theme.of(context).primaryColor,
+                  child: const Text('No', style: TextStyle(fontSize: 18)),
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -531,6 +542,7 @@ class MyHomePage extends State<HomePage> {
       actions: <Widget>[
         Center(
           child: new FlatButton(
+            color: Colors.cyan.shade50,
             onPressed: () {
               Navigator.of(context).pop(context);
             },

@@ -8,12 +8,10 @@ import 'package:flutter_salesman/pages/HomePage.dart';
 import 'package:flutter_salesman/pages/Orders.dart';
 import 'package:flutter_salesman/pages/Orders1.dart';
 import 'package:flutter_salesman/pages/Orders2.dart';
-import 'package:flutter_salesman/pages/Party1.dart';
-import 'package:flutter_salesman/pages/Party2.dart';
+import 'package:flutter_salesman/pages/Party.dart';
 import 'package:flutter_salesman/pages/Previousorders.dart';
 import 'package:flutter_salesman/pages/Takeorder.dart';
 import 'package:flutter_salesman/pages/Territory.dart';
-
 import 'package:flutter_salesman/pages/itemdetails.dart';
 import 'package:flutter_salesman/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,9 +38,8 @@ class MyApp extends StatelessWidget {
       routes: {
         LoginForm.routeName: (context) => LoginForm(),
         HomePage.routeName: (context) => HomePage(),
-        Territory1.routeName: (context) => Territory1(),
-        Party1.routeName: (context) => Party1(),
-        Party2.routeName: (context) => Party2(),
+        Territory.routeName: (context) => Territory(),
+        Party.routeName: (context) => Party(),
         Orders.routeName: (context) => Orders(),
         Orders1.routeName: (context) => Orders1(),
         Orders2.routeName: (context) => Orders2(),

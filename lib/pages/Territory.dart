@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_salesman/pages/HomePage.dart';
-import 'package:flutter_salesman/pages/Party1.dart';
+import 'package:flutter_salesman/pages/Party.dart';
 
-class Territory1 extends StatefulWidget {
-  static const String routeName = "/Territory1";
-  MyTerritory1 createState() => MyTerritory1();
+class Territory extends StatefulWidget {
+  static const String routeName = "/Territory";
+  MyTerritory createState() => MyTerritory();
 }
 
-class MyTerritory1 extends State<Territory1> {
+class MyTerritory extends State<Territory> {
   List<String> Partystatus = [
     'Order Taken',
     'Missing',
@@ -37,6 +37,8 @@ class MyTerritory1 extends State<Territory1> {
 
     List l = routes['Store_details'];
     String tet = routes['Territory_Name'];
+    double lat = routes['lat'];
+    double lon = routes['lon'];
     List<String> PartyList = [];
     for (var i = 0; i < l.length; i++) {
       PartyList.add(l[i]['company_name']);
@@ -114,9 +116,11 @@ class MyTerritory1 extends State<Territory1> {
                     return InkWell(
                       onTap: () {
                         Navigator.of(context)
-                            .pushNamed(Party1.routeName, arguments: {
+                            .pushNamed(Party.routeName, arguments: {
                           "Store_detail": [l[index]],
-                          "Territory_Name-": routes['Territory_Name']
+                          "Territory_Name-": routes['Territory_Name'],
+                          "lat": lat,
+                          "lon": lon
                         }).then((result) {
                           print(result);
                         });
