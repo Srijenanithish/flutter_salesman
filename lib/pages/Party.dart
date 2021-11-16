@@ -10,6 +10,10 @@ class Party1 extends StatefulWidget {
 class myParty1 extends State<Party1> {
   @override
   Widget build(BuildContext context) {
+    final routes =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    List lis = routes['Store_detail'];
+    String terr = routes['Territory_Name-'];
     return Scaffold(
       floatingActionButton: new FloatingActionButton(
         onPressed: () {},
@@ -22,7 +26,10 @@ class myParty1 extends State<Party1> {
       appBar: AppBar(
         backgroundColor: Colors.blue.shade300,
         centerTitle: true,
-        title: Text('Party - on - Territoty 1'),
+        title: terr == null
+            ? SingleChildScrollView(child: Text('Party - on - Territory 1'))
+            : SingleChildScrollView(
+                child: Text(lis[0]['company_name'] + ' - on - ' + terr)),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -92,7 +99,7 @@ class myParty1 extends State<Party1> {
                                     children: [
                                       Text("Party Name : ",
                                           style: TextStyle(fontSize: 19)),
-                                      Text("Arathana Electronics",
+                                      Text(lis[0]['company_name'],
                                           style: TextStyle(fontSize: 19))
                                     ],
                                   ),
@@ -103,7 +110,7 @@ class myParty1 extends State<Party1> {
                                     children: [
                                       Text("Party Holder : ",
                                           style: TextStyle(fontSize: 19)),
-                                      Text("Jane Immanual",
+                                      Text(lis[0]['customer_name'],
                                           style: TextStyle(fontSize: 19))
                                     ],
                                   ),
@@ -114,8 +121,7 @@ class myParty1 extends State<Party1> {
                                     children: [
                                       Text("Address : ",
                                           style: TextStyle(fontSize: 19)),
-                                      Text(
-                                          "120 Street marati street\n 5th corner\n Bangalow road\n Near postoffice \n Thirupur",
+                                      Text(lis[0]['primary_address'],
                                           style: TextStyle(fontSize: 19))
                                     ],
                                   ),
@@ -126,7 +132,7 @@ class myParty1 extends State<Party1> {
                                     children: [
                                       Text("Mobile No : ",
                                           style: TextStyle(fontSize: 19)),
-                                      Text("8248238765",
+                                      Text(lis[0]['mobile_no'],
                                           style: TextStyle(fontSize: 19))
                                     ],
                                   ),

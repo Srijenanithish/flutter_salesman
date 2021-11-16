@@ -17,15 +17,7 @@ class MyTerritory1 extends State<Territory1> {
     'Order Taken',
     'Missing'
   ];
-  List<String> Location = [
-    'Palayakad',
-    'VNR Street',
-    'Dharapuram',
-    'Udumalpet',
-    'Palladam',
-    'Kurichi',
-    'Pollachi'
-  ];
+
   List<String>? PartyListSearch;
   final FocusNode _textFocusNode = FocusNode();
   TextEditingController? _textEditingController = TextEditingController();
@@ -44,11 +36,10 @@ class MyTerritory1 extends State<Territory1> {
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     //print(routes['Store_details']);
     List l = routes['Store_details'];
-    //print(l);
-    //Pist = routes['Store_details'];
+    String tet = routes['Territory_Name'];
     List<String> PartyList = [];
     for (var i = 0; i < l.length; i++) {
-      PartyList.add(l[i]['customer_name']);
+      PartyList.add(l[i]['company_name']);
     }
     List<String> Location = [];
     for (var i = 0; i < l.length; i++) {
@@ -70,7 +61,7 @@ class MyTerritory1 extends State<Territory1> {
       appBar: AppBar(
         backgroundColor: Colors.blue.shade300,
         centerTitle: true,
-        title: Text('Territory 1'),
+        title: tet == null ? Text('Territory_Name') : Text(tet),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -133,9 +124,13 @@ class MyTerritory1 extends State<Territory1> {
                   itemBuilder: (ctx, index) {
                     return InkWell(
                       onTap: () {
+                        print([l[index]]);
+                        sendList();
                         Navigator.of(context)
-                            .pushNamed(Party1.routeName)
-                            .then((result) {
+                            .pushNamed(Party1.routeName, arguments: {
+                          "Store_detail": [l[index]],
+                          "Territory_Name-": routes['Territory_Name']
+                        }).then((result) {
                           print(result);
                         });
                       },
@@ -198,4 +193,6 @@ class MyTerritory1 extends State<Territory1> {
       ),
     );
   }
+
+  sendList() {}
 }

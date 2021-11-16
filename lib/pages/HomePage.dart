@@ -418,8 +418,10 @@ class MyHomePage extends State<HomePage> {
       child: RaisedButton(
         onPressed: () {
           print(list0);
-          Navigator.of(context).pushNamed(Territory1.routeName,
-              arguments: {"Store_details": list0}).then((result) {
+          Navigator.of(context).pushNamed(Territory1.routeName, arguments: {
+            "Store_details": list0,
+            "Territory_Name": name
+          }).then((result) {
             print(result);
           });
         },

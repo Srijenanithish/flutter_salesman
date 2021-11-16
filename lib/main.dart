@@ -3,6 +3,7 @@ import 'dart:io'; //InternetAddress utility
 import 'dart:async'; //For StreamController/Stream
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_salesman/pages/HomePage.dart';
 import 'package:flutter_salesman/pages/Orders.dart';
 import 'package:flutter_salesman/pages/Orders1.dart';
@@ -22,7 +23,10 @@ import 'pages/LoginForm.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Constants.prefs = await SharedPreferences.getInstance();
-  runApp(MyApp());
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
+    runApp(MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
