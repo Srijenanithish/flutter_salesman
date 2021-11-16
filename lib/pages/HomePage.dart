@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_salesman/Sub_pages/runrate.dart';
 import 'package:flutter_salesman/pages/LoginForm.dart';
 import 'package:flutter_salesman/pages/Territory.dart';
-import 'package:flutter_salesman/pages/Territory2.dart';
+
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:flutter_salesman/main.dart';
 import 'package:swipebuttonflutter/swipebuttonflutter.dart';
