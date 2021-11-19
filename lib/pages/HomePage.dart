@@ -25,11 +25,6 @@ class MyHomePage extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    Timer(
-        Duration(seconds: 7),
-        () => Container(
-            color: Colors.white,
-            child: Image.asset("assets/login/screen.gif")));
   }
 
   //For GPS
@@ -41,6 +36,8 @@ class MyHomePage extends State<HomePage> {
   Map dataResponse = {};
   Map Mapresponse_ = {};
   Map dataResponse_ = {};
+  Map Mapresponse_run = {};
+  Map dataResponse_run = {};
   //For button color change
   bool _hasBeenPressed = true;
   bool hasBeenPressed = true;
@@ -89,7 +86,7 @@ class MyHomePage extends State<HomePage> {
                       bottomRight: const Radius.circular(70),
                     ),
                   ),
-                  child: runrate(),
+                  child: getrunrate(),
                 ),
               ),
             ],
@@ -110,17 +107,32 @@ class MyHomePage extends State<HomePage> {
                           await GetAddressFromLatLong(position);
                           await fetchLocation(_currentPosition.latitude,
                               _currentPosition.longitude, Username);
-                          _hasBeenPressed
-                              ? showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      _buildPopupDialog(context),
-                                )
-                              : showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      _build_Popup_Dialog(context),
-                                );
+                          await fetchrunrate(Api_key, Api_Secret, Username);
+                          if (Mapresponse_['message'] == 'Out') {
+                            hasBeenPressed
+                                ? showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        _buildPopupDialog(context),
+                                  )
+                                : showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        _CheckedinAlready(context),
+                                  );
+                          } else {
+                            hasBeenPressed
+                                ? showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        _build_Popup_Dialog(context),
+                                  )
+                                : showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        _CheckedinAlready(context),
+                                  );
+                          }
                         },
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(80.0)),
@@ -377,8 +389,209 @@ class MyHomePage extends State<HomePage> {
     if (response.statusCode == 200) {
       var Respon = await response.stream.bytesToString();
       Mapresponse_ = await json.decode(Respon);
+      print(Mapresponse_['message']);
     } else {
       print(response.reasonPhrase);
+    }
+  }
+
+  getrunrate() {
+    if (Mapresponse_run['message'] == null) {
+      return Row(
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Current Run rate"),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Container(
+                    child: CircularPercentIndicator(
+                        radius: 70,
+                        lineWidth: 5.5,
+                        backgroundColor: Colors.black54,
+                        percent: 0.8,
+                        progressColor: Colors.white,
+                        circularStrokeCap: CircularStrokeCap.round,
+                        animation: true,
+                        center: Text(
+                          "40%",
+                          style: TextStyle(
+                              color: Colors.amber.shade900, fontSize: 20),
+                        )),
+                    width: MediaQuery.of(context).size.width * 0.25,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Required Run rate"),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Container(
+                    child: CircularPercentIndicator(
+                        radius: 70,
+                        lineWidth: 5.5,
+                        backgroundColor: Colors.black54,
+                        percent: 1.0,
+                        progressColor: Colors.white,
+                        circularStrokeCap: CircularStrokeCap.round,
+                        animation: true,
+                        center: Text(
+                          "60%",
+                          style: TextStyle(
+                              color: Colors.amber.shade900, fontSize: 20),
+                        )),
+                    width: MediaQuery.of(context).size.width * 0.25,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Target"),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Container(
+                    child: CircularPercentIndicator(
+                        radius: 70,
+                        lineWidth: 5.5,
+                        backgroundColor: Colors.black54,
+                        percent: 0.0,
+                        progressColor: Colors.amber,
+                        circularStrokeCap: CircularStrokeCap.round,
+                        animation: true,
+                        center: Text(
+                          "100%",
+                          style: TextStyle(
+                              color: Colors.amber.shade900, fontSize: 20),
+                        )),
+                    width: MediaQuery.of(context).size.width * 0.25,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+    } else {
+      return Row(
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Current Run rate"),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Container(
+                    child: CircularPercentIndicator(
+                        radius: 70,
+                        lineWidth: 5.5,
+                        backgroundColor: Colors.black54,
+                        percent: 0.8,
+                        progressColor: Colors.white,
+                        circularStrokeCap: CircularStrokeCap.round,
+                        animation: true,
+                        center: Text(
+                          "40%",
+                          style: TextStyle(
+                              color: Colors.amber.shade900, fontSize: 20),
+                        )),
+                    width: MediaQuery.of(context).size.width * 0.25,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Required Run rate"),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Container(
+                    child: CircularPercentIndicator(
+                        radius: 70,
+                        lineWidth: 5.5,
+                        backgroundColor: Colors.black54,
+                        percent: 1.0,
+                        progressColor: Colors.white,
+                        circularStrokeCap: CircularStrokeCap.round,
+                        animation: true,
+                        center: Text(
+                          "60%",
+                          style: TextStyle(
+                              color: Colors.amber.shade900, fontSize: 20),
+                        )),
+                    width: MediaQuery.of(context).size.width * 0.25,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Target"),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Container(
+                    child: CircularPercentIndicator(
+                        radius: 70,
+                        lineWidth: 5.5,
+                        backgroundColor: Colors.black54,
+                        percent: 1.0,
+                        progressColor: Colors.amber,
+                        circularStrokeCap: CircularStrokeCap.round,
+                        animation: true,
+                        center: Text(
+                          "100%",
+                          style: TextStyle(
+                              color: Colors.amber.shade900, fontSize: 20),
+                        )),
+                    width: MediaQuery.of(context).size.width * 0.25,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
     }
   }
 
@@ -391,6 +604,8 @@ class MyHomePage extends State<HomePage> {
       List dataSet = Mapresponse['territory_name'];
       List storeset = Mapresponse['store_details'];
 
+      //print(storeset[0]);
+      // print(Itemset[0]);
       List<Widget> fieldList = [];
       for (var i = 0; i < dataSet.length; i++) {
         fieldList.add(getButton(dataSet[i], storeset[i]));
@@ -418,6 +633,8 @@ class MyHomePage extends State<HomePage> {
   // }
 
   Widget getButton(name, list0) {
+    //print(list0);
+    // print(Itemset);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: RaisedButton(
@@ -426,7 +643,8 @@ class MyHomePage extends State<HomePage> {
             "Store_details": list0,
             "Territory_Name": name,
             "lat": _currentPosition.latitude,
-            "lon": _currentPosition.longitude
+            "lon": _currentPosition.longitude,
+            "ItemSet": Mapresponse['item_details']
           }).then((result) {
             print(result);
           });
@@ -495,6 +713,8 @@ class MyHomePage extends State<HomePage> {
               padding: const EdgeInsets.fromLTRB(40, 0, 8, 0),
               child: Center(
                 child: new FlatButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
                   color: Colors.cyan.shade50,
                   onPressed: () {
                     setState(() {
@@ -511,6 +731,8 @@ class MyHomePage extends State<HomePage> {
               padding: const EdgeInsets.all(8.0),
               child: Center(
                 child: new FlatButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
                   color: Colors.cyan.shade50,
                   onPressed: () {
                     setState(() {
@@ -529,7 +751,7 @@ class MyHomePage extends State<HomePage> {
     );
   }
 
-  Widget _build_Popup_Dialog(BuildContext context) {
+  Widget _CheckedinAlready(BuildContext context) {
     return new AlertDialog(
       title: Center(child: const Text('You have Already Checked In')),
       shape: RoundedRectangleBorder(
@@ -542,6 +764,8 @@ class MyHomePage extends State<HomePage> {
       actions: <Widget>[
         Center(
           child: new FlatButton(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15.0))),
             color: Colors.cyan.shade50,
             onPressed: () {
               Navigator.of(context).pop(context);
@@ -552,5 +776,55 @@ class MyHomePage extends State<HomePage> {
         ),
       ],
     );
+  }
+
+  Widget _build_Popup_Dialog(BuildContext context) {
+    return new AlertDialog(
+      title: Center(child: const Text('You are not in the Range Please Check')),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(32.0))),
+      contentPadding: EdgeInsets.only(top: 10.0),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+      ),
+      actions: <Widget>[
+        Center(
+          child: new FlatButton(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15.0))),
+            color: Colors.cyan.shade50,
+            onPressed: () {
+              Navigator.of(context).pop(context);
+            },
+            textColor: Theme.of(context).primaryColor,
+            child: const Text('Okay', style: TextStyle(fontSize: 18)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  fetchrunrate(x, y, z) async {
+    var headers = {
+      'Authorization': 'token ' + x + ':' + y,
+      'Content-Type': 'application/json',
+      'Cookie':
+          'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
+    };
+    var request = http.Request('GET',
+        Uri.parse('http://test-sfa.aerele.in/api/method/salesman.api.target'));
+    request.body = json.encode({"username": z});
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var Run = await response.stream.bytesToString();
+      Mapresponse_run = await json.decode(Run);
+      print(Mapresponse_run);
+    } else {
+      print(response.reasonPhrase);
+    }
   }
 }

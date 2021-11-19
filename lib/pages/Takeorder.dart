@@ -10,6 +10,10 @@ class MyTakeorder extends State<Takeorder> {
   @override
   bool _hasBeenPressed = true;
   Widget build(BuildContext context) {
+    final routes =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    String Item_name = routes['Item_name'];
+    String Rupees = routes['Rupees'];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue.shade300,
@@ -68,7 +72,7 @@ class MyTakeorder extends State<Takeorder> {
                                     children: [
                                       Text("Item Name : ",
                                           style: TextStyle(fontSize: 19)),
-                                      Text("Red Velvet Pant",
+                                      Text(Item_name,
                                           style: TextStyle(fontSize: 19))
                                     ],
                                   ),
@@ -79,7 +83,7 @@ class MyTakeorder extends State<Takeorder> {
                                     children: [
                                       Text("MRP : ",
                                           style: TextStyle(fontSize: 19)),
-                                      Text("\₹ 200",
+                                      Text("\₹ " + Rupees,
                                           style: TextStyle(fontSize: 19))
                                     ],
                                   ),

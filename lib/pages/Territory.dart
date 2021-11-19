@@ -39,6 +39,7 @@ class MyTerritory extends State<Territory> {
     String tet = routes['Territory_Name'];
     double lat = routes['lat'];
     double lon = routes['lon'];
+    List item_set = routes['ItemSet'];
     List<String> PartyList = [];
     for (var i = 0; i < l.length; i++) {
       PartyList.add(l[i]['company_name']);
@@ -120,7 +121,8 @@ class MyTerritory extends State<Territory> {
                           "Store_detail": [l[index]],
                           "Territory_Name-": routes['Territory_Name'],
                           "lat": lat,
-                          "lon": lon
+                          "lon": lon,
+                          "Itemset": item_set
                         }).then((result) {
                           print(result);
                         });

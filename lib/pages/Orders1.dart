@@ -7,33 +7,6 @@ class Orders1 extends StatefulWidget {
 }
 
 class MyOrders1 extends State<Orders1> {
-  List<String> PartyList = [
-    '2m Cloth',
-    'red velvet pant',
-    'green sweater',
-    'jacket',
-    'woolen coat',
-    'new Kurthis',
-    'jaipur materials'
-  ];
-  List<String> Partystatus = [
-    'Order Taken',
-    'Missing',
-    'Order Taken',
-    'Missing',
-    'Missing',
-    'Order Taken',
-    'Missing'
-  ];
-  List<String> Location = [
-    'Palayakad',
-    'VNR Street',
-    'Dharapuram',
-    'Udumalpet',
-    'Palladam',
-    'Kurichi',
-    'Pollachi'
-  ];
   List<String>? PartyListSearch;
   final FocusNode _textFocusNode = FocusNode();
   TextEditingController? _textEditingController = TextEditingController();
@@ -48,6 +21,16 @@ class MyOrders1 extends State<Orders1> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> PartyList = [];
+    List<String> Location = [];
+
+    final routes =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    List items = routes['Items'];
+    for (var i = 0; i < items.length; i++) {
+      PartyList.add(items[i][0]['item_name']);
+      Location.add(items[i][0]['price_rate']);
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue.shade300,
@@ -115,9 +98,11 @@ class MyOrders1 extends State<Orders1> {
                   itemBuilder: (ctx, index) {
                     return InkWell(
                       onTap: () {
-                        Navigator.of(context)
-                            .pushNamed(Takeorder.routeName)
-                            .then((result) {
+                        Navigator.of(context).pushNamed(Takeorder.routeName,
+                            arguments: {
+                              'Item_name': PartyList[index],
+                              'Rupees': Location[index]
+                            }).then((result) {
                           print(result);
                         });
                       },
@@ -154,20 +139,9 @@ class MyOrders1 extends State<Orders1> {
                                 ],
                               ),
                               Padding(
-                                padding: EdgeInsets.fromLTRB(0, 0, 150, 0),
-                                child: Text(
-                                  Location[index],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(0, 20, 210, 0),
-                                child: Text(
-                                  Partystatus[index],
-                                  style: TextStyle(
-                                      color: Partystatus[index] == 'Missing'
-                                          ? Colors.red
-                                          : Colors.green),
-                                ),
+                                padding: EdgeInsets.fromLTRB(0, 0, 180, 0),
+                                child: Text('Rupees : ' + Location[index],
+                                    style: TextStyle(fontSize: 17)),
                               ),
                             ],
                           ),

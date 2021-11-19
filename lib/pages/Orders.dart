@@ -1,7 +1,6 @@
 import 'package:flashy_tab_bar/flashy_tab_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_salesman/pages/Orders1.dart';
-import 'package:flutter_salesman/pages/Orders2.dart';
 import 'package:flutter_salesman/pages/Previousorders.dart';
 
 class Orders extends StatefulWidget {
@@ -32,6 +31,9 @@ class MyOrders extends State<Orders> {
 
   @override
   Widget build(BuildContext context) {
+    final routes =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
     return Scaffold(
       body: PageView(
         onPageChanged: (index) => setState(() {

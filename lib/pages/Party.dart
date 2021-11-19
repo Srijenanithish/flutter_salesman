@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_salesman/pages/Orders.dart';
 import 'package:flutter_salesman/pages/Orders1.dart';
+import 'package:flutter_salesman/pages/Previousorders.dart';
 import 'package:http/http.dart' as http;
 
 class Party extends StatefulWidget {
@@ -11,6 +12,7 @@ class Party extends StatefulWidget {
 }
 
 class myParty extends State<Party> {
+  Map Mapresponse = {};
   @override
   Widget build(BuildContext context) {
     final routes =
@@ -19,15 +21,8 @@ class myParty extends State<Party> {
     String terr = routes['Territory_Name-'];
     double lat = routes['lat'];
     double lon = routes['lon'];
+    List Itemset = routes['Itemset'];
     return Scaffold(
-      floatingActionButton: new FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Add New party',
-        elevation: 10,
-        splashColor: Colors.grey,
-        child: const Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       appBar: AppBar(
         backgroundColor: Colors.blue.shade300,
         centerTitle: true,
@@ -131,7 +126,7 @@ class myParty extends State<Party> {
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 10,
+                                    height: 5,
                                   ),
                                   Row(
                                     children: [
@@ -153,11 +148,18 @@ class myParty extends State<Party> {
                                 child: RaisedButton(
                                   onPressed: () {
                                     fetchLocation(lat, lon);
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          _buildPopupDialog(context),
-                                    );
+                                    // showDialog(
+                                    //   context: context,
+                                    //   builder: (BuildContext context) =>
+                                    //       _buildPopupDialog(context),
+                                    // );
+                                    Navigator.of(context).pushNamed(
+                                        Orders1.routeName,
+                                        arguments: {
+                                          "Items": Itemset
+                                        }).then((result) {
+                                      print(result);
+                                    });
                                   },
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
@@ -191,7 +193,82 @@ class myParty extends State<Party> {
                                               color: Colors.black54,
                                             ),
                                             Text(
-                                              'Order Taking',
+                                              'Take Order',
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            Icon(
+                                              Icons.arrow_forward,
+                                              color: Colors.pink,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                            child: Center(
+                              child: Container(
+                                width: 300,
+                                child: RaisedButton(
+                                  onPressed: () {
+                                    fetchLocation(lat, lon);
+                                    // showDialog(
+                                    //   context: context,
+                                    //   builder: (BuildContext context) =>
+                                    //       _buildPopupDialog(context),
+                                    // );
+                                    Navigator.of(context).pushNamed(
+                                        Previousorders.routeName,
+                                        arguments: {
+                                          "Items": Itemset
+                                        }).then((result) {
+                                      print(result);
+                                    });
+                                  },
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(80.0)),
+                                  padding: EdgeInsets.all(0.0),
+                                  child: Ink(
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            Colors.cyan,
+                                            Colors.cyanAccent
+                                          ],
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(30.0)),
+                                    child: Container(
+                                      constraints: BoxConstraints(
+                                          maxWidth: 300.0, minHeight: 50.0),
+                                      alignment: Alignment.center,
+                                      child: Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(15, 10, 10, 15),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Icon(
+                                              Icons.assignment_ind_outlined,
+                                              color: Colors.black54,
+                                            ),
+                                            Text(
+                                              'Previous Orders',
                                               style: TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w700,
@@ -267,9 +344,9 @@ class myParty extends State<Party> {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      var Respon = await response.stream.bytesToString();
-
-      print(Respon);
+      var res = await response.stream.bytesToString();
+      Mapresponse = await json.decode(res);
+      print(Mapresponse);
     } else {
       print(response.reasonPhrase);
     }
