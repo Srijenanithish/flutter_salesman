@@ -3,6 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_salesman/main.dart';
+import 'package:flutter_salesman/model/transaction.dart';
+import 'package:flutter_salesman/pages/boxes.dart';
+import 'package:flutter_salesman/pages/transaction_page.dart';
 
 import 'package:flutter_salesman/utils/constants.dart';
 import 'package:form_field_validator/form_field_validator.dart';
@@ -41,6 +44,7 @@ class _LoginFormValidationState extends State<LoginForm> {
   }
 
   TextEditingController username = TextEditingController();
+  TextEditingController api_key = TextEditingController();
   TextEditingController password = TextEditingController();
   var controller = TextEditingController();
   String stringResponse = '0';
@@ -135,6 +139,35 @@ class _LoginFormValidationState extends State<LoginForm> {
                                         fillColor: Colors.black12,
                                         labelText: 'Username',
                                         hintText: 'Enter your Username'),
+                                    validator: MultiValidator([
+                                      RequiredValidator(
+                                          errorText: "* Required"),
+                                      MinLengthValidator(4,
+                                          errorText:
+                                              "Username should be atleast 6 characters"),
+                                    ])),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 15),
+                                child: TextFormField(
+                                    controller: api_key,
+                                    decoration: InputDecoration(
+                                        prefixIcon:
+                                            prefixIcon ?? Icon(Icons.person),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          borderSide: BorderSide(
+                                            width: 0,
+                                            style: BorderStyle.none,
+                                          ),
+                                        ),
+                                        filled: true,
+                                        contentPadding: EdgeInsets.all(16),
+                                        isDense: true,
+                                        fillColor: Colors.black12,
+                                        labelText: 'api_key',
+                                        hintText: 'api_key'),
                                     validator: MultiValidator([
                                       RequiredValidator(
                                           errorText: "* Required"),
@@ -286,11 +319,21 @@ class _LoginFormValidationState extends State<LoginForm> {
       Mapresponse = await json.decode(res);
       dataResponse = Mapresponse['login'];
       print(dataResponse['role']);
-      Navigator.of(context).pushNamed(HomePage.routeName, arguments: {
-        "Api_key": dataResponse['api_key'],
-        "Api_secret": dataResponse['api_secret'],
-        "Username": x
-      }).then((result) async {
+      final transaction = Transaction()
+        ..api_key = dataResponse['api_key']
+        ..api_secret = dataResponse['api_secret']
+        ..Username = x
+        ..Password = y;
+
+      final box = Boxes.getTransactions();
+      box.add(transaction);
+      Navigator.of(context).pushNamed(TransactionPage.routeName).
+          //   HomePage.routeName, arguments: {
+          //   "Api_key": dataResponse['api_key'],
+          //   "Api_secret": dataResponse['api_secret'],
+          //   "Username": x
+          // }).
+          then((result) async {
         print(result);
       });
     } else {
