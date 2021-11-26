@@ -10,9 +10,20 @@ class MyTakeorder extends State<Takeorder> {
   @override
   bool _hasBeenPressed = true;
   Widget build(BuildContext context) {
+    List<String> PartyList = [];
+    List<String> Location = [];
+
     final routes =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    String Item_name = routes['Item_name'];
+    List items = routes['Items'];
+    for (var i = 0; i < items.length; i++) {
+      PartyList.add(items[i][0]['item_name']);
+      Location.add(items[i][0]['price_rate']);
+    }
+    print(PartyList);
+    // final routes =
+    //     ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    // String Item_name = routes['Item_name'];
     String Rupees = routes['Rupees'];
     return Scaffold(
       appBar: AppBar(
@@ -33,7 +44,7 @@ class MyTakeorder extends State<Takeorder> {
         child: Stack(
           children: <Widget>[
             Container(
-              height: MediaQuery.of(context).size.height * 0.2,
+              height: MediaQuery.of(context).size.height * 0.05,
               width: MediaQuery.of(context).size.width,
               child: Container(
                 decoration: BoxDecoration(
@@ -50,47 +61,72 @@ class MyTakeorder extends State<Takeorder> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+              padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
+                      child: Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                          child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              margin: EdgeInsets.all(10.0),
+                              child: Table(
+                                  defaultColumnWidth: FixedColumnWidth(10.0),
+                                  border: TableBorder.all(
+                                      width: 1.0, color: Colors.white),
+                                  textDirection: TextDirection.ltr,
+                                  defaultVerticalAlignment:
+                                      TableCellVerticalAlignment.middle,
+                                  columnWidths: {
+                                    0: FractionColumnWidth(.2),
+                                    1: FractionColumnWidth(.001),
+                                  },
+                                  children: [
+                                    TableRow(children: [
+                                      Container(
+                                        height: 40.0,
+                                        color: Colors.black12,
+                                        padding: const EdgeInsets.all(10.5),
+                                        child: Text('Item Name',
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                color: Colors.pink),
+                                            textAlign: TextAlign.center),
+                                      ),
+                                      TableCell(
+                                          verticalAlignment:
+                                              TableCellVerticalAlignment.fill,
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            color: Colors.black12,
+                                            child: Text('---->',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.pink),
+                                                textAlign: TextAlign.center),
+                                          )),
+                                      TableCell(
+                                          verticalAlignment:
+                                              TableCellVerticalAlignment.fill,
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            color: Colors.white,
+                                            child: Text('Quantity',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: Colors.pink),
+                                                textAlign: TextAlign.center),
+                                          )),
+                                    ])
+                                  ])))),
+                  Container(
                     child: Column(
                       children: [
-                        Card(
-                            elevation: 40,
-                            margin: EdgeInsets.all(25),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            clipBehavior: Clip.antiAlias,
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text("Item Name : ",
-                                          style: TextStyle(fontSize: 19)),
-                                      Text(Item_name,
-                                          style: TextStyle(fontSize: 19))
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text("MRP : ",
-                                          style: TextStyle(fontSize: 19)),
-                                      Text("\₹ " + Rupees,
-                                          style: TextStyle(fontSize: 19))
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            )),
-                        matrix(),
+                        //matrix(),
+                        //get(PartyList),
+
+                        get(PartyList),
                         Container(
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -163,6 +199,74 @@ class MyTakeorder extends State<Takeorder> {
         ),
       ),
     );
+  }
+
+  get(PartyList) {
+    List<Widget> fieldList = [];
+    for (var i = 0; i < PartyList.length; i++) {
+      fieldList.add(Gettable(PartyList[i]));
+    }
+    return Container(
+      child: Column(
+        children: fieldList,
+      ),
+    );
+  }
+
+  Gettable(PartyList) {
+    return Container(
+        child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: Container(
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.all(10.0),
+                child: Table(
+                    defaultColumnWidth: FixedColumnWidth(10.0),
+                    border: TableBorder.all(width: 1.0, color: Colors.white),
+                    textDirection: TextDirection.ltr,
+                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                    columnWidths: {
+                      0: FractionColumnWidth(.2),
+                      1: FractionColumnWidth(.001),
+                    },
+                    children: [
+                      TableRow(children: [
+                        Container(
+                          height: 40.0,
+                          color: Colors.black12,
+                          padding: const EdgeInsets.all(10.5),
+                          child: Text(PartyList,
+                              style: TextStyle(fontSize: 17),
+                              textAlign: TextAlign.center),
+                        ),
+                        TableCell(
+                            verticalAlignment: TableCellVerticalAlignment.fill,
+                            child: Container(
+                              alignment: Alignment.center,
+                              color: Colors.black12,
+                              child: Text('---->',
+                                  style: TextStyle(fontSize: 15),
+                                  textAlign: TextAlign.center),
+                            )),
+                        TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.fill,
+                          child: Container(
+                            alignment: Alignment.center,
+                            color: Colors.white,
+                            child: Center(
+                                child: TextField(
+                              style: TextStyle(color: Colors.pinkAccent),
+                              cursorColor: Colors.pink,
+                              textAlign: TextAlign.center,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            )),
+                          ),
+                        ),
+                      ])
+                    ]))));
   }
 }
 

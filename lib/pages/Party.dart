@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_salesman/pages/Orders.dart';
 import 'package:flutter_salesman/pages/Orders1.dart';
 import 'package:flutter_salesman/pages/Previousorders.dart';
+import 'package:flutter_salesman/pages/Takeorder.dart';
 import 'package:http/http.dart' as http;
 
 class Party extends StatefulWidget {
@@ -72,7 +73,7 @@ class myParty extends State<Party> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 60, 0, 0),
+              padding: const EdgeInsets.fromLTRB(0, 32, 0, 0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -117,13 +118,16 @@ class myParty extends State<Party> {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  Row(
-                                    children: [
-                                      Text("Address : ",
-                                          style: TextStyle(fontSize: 19)),
-                                      Text(lis[0]['primary_address'],
-                                          style: TextStyle(fontSize: 19))
-                                    ],
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      children: [
+                                        Text("Address : ",
+                                            style: TextStyle(fontSize: 19)),
+                                        Text(lis[0]['primary_address'],
+                                            style: TextStyle(fontSize: 19))
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 5,
@@ -154,7 +158,7 @@ class myParty extends State<Party> {
                                     //       _buildPopupDialog(context),
                                     // );
                                     Navigator.of(context).pushNamed(
-                                        Orders1.routeName,
+                                        Takeorder.routeName,
                                         arguments: {
                                           "Items": Itemset
                                         }).then((result) {

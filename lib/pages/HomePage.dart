@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:io'; //InternetAddress utility
 import 'dart:async'; //For StreamController/Stream
+
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
 import 'LoginForm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_salesman/Sub_pages/runrate.dart';
@@ -13,6 +16,7 @@ import '../Sub_pages/drawer.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 void main() => runApp(HomePage());
 
@@ -22,11 +26,6 @@ class HomePage extends StatefulWidget {
 }
 
 class MyHomePage extends State<HomePage> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   //For GPS
   Position _currentPosition = Position();
   String _currentAddress = '';
@@ -69,6 +68,7 @@ class MyHomePage extends State<HomePage> {
       ),
       body: SingleChildScrollView(
         child: Stack(children: <Widget>[
+          // Text(transactions[0].api_key),
           Column(
             children: [
               Container(
@@ -105,10 +105,11 @@ class MyHomePage extends State<HomePage> {
                           Position position = await _getGeoLocationPosition();
                           await _getCurrentLocation();
                           await GetAddressFromLatLong(position);
+                          await fetchrunrate(Api_key, Api_Secret, Username);
                           await fetchLocation(_currentPosition.latitude,
                               _currentPosition.longitude, Username);
-                          await fetchrunrate(Api_key, Api_Secret, Username);
-                          if (Mapresponse_['message'] == 'Out') {
+
+                          if (Mapresponse_['message'] == 'In') {
                             hasBeenPressed
                                 ? showDialog(
                                     context: context,
@@ -262,6 +263,7 @@ class MyHomePage extends State<HomePage> {
               ),
 
               //if (_currentAddress != null) Text(_currentAddress),
+
               if (Address != null) Text(Address),
               if (_currentPosition != 'Hello')
                 Text(
@@ -513,7 +515,8 @@ class MyHomePage extends State<HomePage> {
                         radius: 70,
                         lineWidth: 5.5,
                         backgroundColor: Colors.black54,
-                        percent: 0.8,
+                        percent:
+                            (Mapresponse_run['message'][0]['achieved']) / 100,
                         progressColor: Colors.white,
                         circularStrokeCap: CircularStrokeCap.round,
                         animation: true,
@@ -544,7 +547,8 @@ class MyHomePage extends State<HomePage> {
                         radius: 70,
                         lineWidth: 5.5,
                         backgroundColor: Colors.black54,
-                        percent: 1.0,
+                        percent:
+                            (Mapresponse_run['message'][0]['variance']) / 100,
                         progressColor: Colors.white,
                         circularStrokeCap: CircularStrokeCap.round,
                         animation: true,
@@ -575,7 +579,8 @@ class MyHomePage extends State<HomePage> {
                         radius: 70,
                         lineWidth: 5.5,
                         backgroundColor: Colors.black54,
-                        percent: 1.0,
+                        percent:
+                            (Mapresponse_run['message'][0]['target']) / 100,
                         progressColor: Colors.amber,
                         circularStrokeCap: CircularStrokeCap.round,
                         animation: true,

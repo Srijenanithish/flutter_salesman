@@ -4,7 +4,9 @@ import 'dart:async'; //For StreamController/Stream
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_salesman/pages/HomePage.dart';
+
 import 'package:flutter_salesman/pages/Orders.dart';
 import 'package:flutter_salesman/pages/Orders1.dart';
 import 'package:flutter_salesman/pages/Orders2.dart';
@@ -14,13 +16,17 @@ import 'package:flutter_salesman/pages/Takeorder.dart';
 import 'package:flutter_salesman/pages/Territory.dart';
 import 'package:flutter_salesman/pages/itemdetails.dart';
 import 'package:flutter_salesman/utils/constants.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'pages/LoginForm.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   Constants.prefs = await SharedPreferences.getInstance();
+
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
     runApp(MyApp());

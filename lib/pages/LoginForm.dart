@@ -2,8 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_salesman/main.dart';
+
 import 'package:flutter_salesman/utils/constants.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'HomePage.dart';
 import 'dart:async';
@@ -42,7 +46,6 @@ class _LoginFormValidationState extends State<LoginForm> {
   String stringResponse = '0';
   Map Mapresponse = {};
   Map dataResponse = {};
-
   // @override
   // void initState() {
   //   super.initState();
@@ -58,6 +61,7 @@ class _LoginFormValidationState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    String data = '';
     return Container(
       child: Scaffold(
         // By defaut, Scaffold background is white
@@ -281,7 +285,7 @@ class _LoginFormValidationState extends State<LoginForm> {
       var res = await response.stream.bytesToString();
       Mapresponse = await json.decode(res);
       dataResponse = Mapresponse['login'];
-      var data = dataResponse['api_key'];
+      print(dataResponse['role']);
       Navigator.of(context).pushNamed(HomePage.routeName, arguments: {
         "Api_key": dataResponse['api_key'],
         "Api_secret": dataResponse['api_secret'],
