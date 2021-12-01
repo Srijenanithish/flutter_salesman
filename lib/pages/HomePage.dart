@@ -2,8 +2,12 @@ import 'dart:convert';
 import 'dart:io'; //InternetAddress utility
 import 'dart:async'; //For StreamController/Stream
 
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:hive/hive.dart';
+import 'package:flutter_salesman/db/data_helper.dart';
+import 'package:flutter_salesman/db/database_helper.dart';
+import 'package:flutter_salesman/model/data.dart';
+import 'package:flutter_salesman/model/details.dart';
+import 'package:sqflite/sqflite.dart';
+
 import 'LoginForm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_salesman/Sub_pages/runrate.dart';
@@ -21,16 +25,42 @@ import 'package:intl/intl.dart';
 void main() => runApp(HomePage());
 
 class HomePage extends StatefulWidget {
+  final Detail? detail;
+  const HomePage({
+    Key? key,
+    this.detail,
+  }) : super(key: key);
   static const String routeName = "/home";
   MyHomePage createState() => MyHomePage();
 }
 
 class MyHomePage extends State<HomePage> {
+  List<Note> details = [];
+
+  @override
+  void initState() {
+    super.initState();
+    refreshNotes();
+  }
+
+  @override
+  void dispose() {
+    NotesDatabase.instance.close();
+
+    super.dispose();
+  }
+
+  Future refreshNotes() async {
+    this.details = await NotesDatabase.instance.readAllNotes();
+  }
+
   //For GPS
   Position _currentPosition = Position();
   String _currentAddress = '';
   String Address = '';
-
+  bool isImportant = true;
+  int number = 0;
+  List<String> territory_details = [];
   Map Mapresponse = {};
   Map dataResponse = {};
   Map Mapresponse_ = {};
@@ -68,9 +98,9 @@ class MyHomePage extends State<HomePage> {
       ),
       body: SingleChildScrollView(
         child: Stack(children: <Widget>[
-          // Text(transactions[0].api_key),
           Column(
             children: [
+              Text(details.length.toString()),
               Container(
                 height: MediaQuery.of(context).size.height * 0.3,
                 width: MediaQuery.of(context).size.width,
@@ -102,6 +132,7 @@ class MyHomePage extends State<HomePage> {
                       width: 120,
                       child: RaisedButton(
                         onPressed: () async {
+                          refreshNotes();
                           Position position = await _getGeoLocationPosition();
                           await _getCurrentLocation();
                           await GetAddressFromLatLong(position);
@@ -263,7 +294,7 @@ class MyHomePage extends State<HomePage> {
               ),
 
               //if (_currentAddress != null) Text(_currentAddress),
-
+              //Text(transactions[5].territory_name[0]),
               if (Address != null) Text(Address),
               if (_currentPosition != 'Hello')
                 Text(
@@ -349,6 +380,12 @@ class MyHomePage extends State<HomePage> {
     });
   }
 
+  Future addNote() async {
+    final detail = Detail();
+
+    await DetailsDatabase.instance.create(detail);
+  }
+
   fetchparty(x, y, z) async {
     var headers = {
       'Authorization': 'token ' + x + ':' + y,
@@ -372,6 +409,7 @@ class MyHomePage extends State<HomePage> {
       var res = await response.stream.bytesToString();
       Mapresponse = await json.decode(res);
       print(Mapresponse);
+      addNote();
     } else {
       print(response.reasonPhrase);
     }

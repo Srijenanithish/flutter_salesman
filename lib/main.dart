@@ -4,7 +4,6 @@ import 'dart:async'; //For StreamController/Stream
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_salesman/model/transaction.dart';
 
 import 'package:flutter_salesman/pages/HomePage.dart';
 
@@ -16,20 +15,16 @@ import 'package:flutter_salesman/pages/Previousorders.dart';
 import 'package:flutter_salesman/pages/Takeorder.dart';
 import 'package:flutter_salesman/pages/Territory.dart';
 import 'package:flutter_salesman/pages/itemdetails.dart';
-import 'package:flutter_salesman/pages/transaction_page.dart';
+
 import 'package:flutter_salesman/utils/constants.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'pages/LoginForm.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
 
-  Hive.registerAdapter(TransactionAdapter());
-  await Hive.openBox<Transaction>('transactions');
   Constants.prefs = await SharedPreferences.getInstance();
 
   SystemChrome.setPreferredOrientations(
@@ -57,7 +52,6 @@ class MyApp extends StatelessWidget {
         Previousorders.routeName: (context) => Previousorders(),
         Takeorder.routeName: (context) => Takeorder(),
         itemdetails.routeName: (context) => itemdetails(),
-        TransactionPage.routeName: (context) => TransactionPage(),
       },
 
       title: 'Salesman App',

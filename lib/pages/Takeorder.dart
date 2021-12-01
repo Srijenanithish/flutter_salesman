@@ -1,10 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_salesman/Sub_pages/matrix.dart';
+import 'package:http/http.dart' as http;
 
 class Takeorder extends StatefulWidget {
   static const String routeName = "/Takeorder";
   MyTakeorder createState() => MyTakeorder();
 }
+
+TextEditingController Quantity = TextEditingController();
+var returnData = {};
 
 class MyTakeorder extends State<Takeorder> {
   @override
@@ -21,6 +27,7 @@ class MyTakeorder extends State<Takeorder> {
       Location.add(items[i][0]['price_rate']);
     }
     print(PartyList);
+    print(returnData);
     // final routes =
     //     ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     // String Item_name = routes['Item_name'];
@@ -140,6 +147,7 @@ class MyTakeorder extends State<Takeorder> {
                                       builder: (BuildContext context) =>
                                           _buildPopupDialog(context),
                                     );
+                                    salesorder(returnData);
                                   },
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
@@ -201,6 +209,22 @@ class MyTakeorder extends State<Takeorder> {
     );
   }
 
+  Future salesorder(returnData) async {
+    var headers = {'Content-Type': 'application/json'};
+    var request = http.Request('POST',
+        Uri.parse('localhost:8000/api/method/salesman.api.sales_point_order'));
+    request.body = ''' "args" : {$returnData }''';
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
   get(PartyList) {
     List<Widget> fieldList = [];
     for (var i = 0; i < PartyList.length; i++) {
@@ -255,6 +279,14 @@ class MyTakeorder extends State<Takeorder> {
                             color: Colors.white,
                             child: Center(
                                 child: TextField(
+                              onChanged: (String value) {
+                                try {
+                                  returnData[PartyList] = value;
+                                } catch (e) {
+                                  returnData[PartyList] = 0;
+                                }
+                                print(returnData);
+                              },
                               style: TextStyle(color: Colors.pinkAccent),
                               cursorColor: Colors.pink,
                               textAlign: TextAlign.center,

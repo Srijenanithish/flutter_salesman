@@ -2,15 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_salesman/db/database_helper.dart';
 import 'package:flutter_salesman/main.dart';
-import 'package:flutter_salesman/model/transaction.dart';
-import 'package:flutter_salesman/pages/boxes.dart';
-import 'package:flutter_salesman/pages/transaction_page.dart';
-
+import 'package:flutter_salesman/model/data.dart';
 import 'package:flutter_salesman/utils/constants.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+
 import 'package:http/http.dart' as http;
 import 'HomePage.dart';
 import 'dart:async';
@@ -21,6 +18,11 @@ enum ErrorAnimationProp { offset }
 
 //https://flutter.dev/docs/cookbook/navigation/passing-data
 class LoginForm extends StatefulWidget {
+  final Note? note;
+  const LoginForm({
+    Key? key,
+    this.note,
+  }) : super(key: key);
   static const String routeName = "/login";
 
   @override
@@ -43,9 +45,16 @@ class _LoginFormValidationState extends State<LoginForm> {
       return null;
   }
 
-  TextEditingController username = TextEditingController();
-  TextEditingController api_key = TextEditingController();
-  TextEditingController password = TextEditingController();
+  bool isImportant = true;
+  int number = 0;
+  String api_key = '';
+  String api_secret = '';
+
+  String username = '';
+  String password = '';
+  TextEditingController username_ = TextEditingController();
+
+  TextEditingController password_ = TextEditingController();
   var controller = TextEditingController();
   String stringResponse = '0';
   Map Mapresponse = {};
@@ -61,6 +70,12 @@ class _LoginFormValidationState extends State<LoginForm> {
   void initState() {
     _passwordVisible = false;
     super.initState();
+    isImportant = widget.note?.isImportant ?? false;
+    number = widget.note?.number ?? 0;
+    api_key = widget.note?.api_key ?? '';
+    api_secret = widget.note?.api_secret ?? '';
+    username = widget.note?.username ?? '';
+    password = widget.note?.password ?? '';
   }
 
   @override
@@ -121,7 +136,7 @@ class _LoginFormValidationState extends State<LoginForm> {
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 15),
                                 child: TextFormField(
-                                    controller: username,
+                                    controller: username_,
                                     decoration: InputDecoration(
                                         prefixIcon:
                                             prefixIcon ?? Icon(Icons.person),
@@ -148,42 +163,13 @@ class _LoginFormValidationState extends State<LoginForm> {
                                     ])),
                               ),
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 15),
-                                child: TextFormField(
-                                    controller: api_key,
-                                    decoration: InputDecoration(
-                                        prefixIcon:
-                                            prefixIcon ?? Icon(Icons.person),
-                                        border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          borderSide: BorderSide(
-                                            width: 0,
-                                            style: BorderStyle.none,
-                                          ),
-                                        ),
-                                        filled: true,
-                                        contentPadding: EdgeInsets.all(16),
-                                        isDense: true,
-                                        fillColor: Colors.black12,
-                                        labelText: 'api_key',
-                                        hintText: 'api_key'),
-                                    validator: MultiValidator([
-                                      RequiredValidator(
-                                          errorText: "* Required"),
-                                      MinLengthValidator(4,
-                                          errorText:
-                                              "Username should be atleast 6 characters"),
-                                    ])),
-                              ),
-                              Padding(
                                 padding: const EdgeInsets.only(
                                     left: 15.0,
                                     right: 15.0,
                                     top: 15,
                                     bottom: 0),
                                 child: TextFormField(
-                                    controller: password,
+                                    controller: password_,
                                     // obscureText: true,
                                     obscureText: !_passwordVisible,
                                     decoration: InputDecoration(
@@ -241,11 +227,11 @@ class _LoginFormValidationState extends State<LoginForm> {
                                       //   print(result);
                                       // });
 
-                                      String _user =
-                                          username.text.toString().trim();
-                                      String _pass =
-                                          password.text.toString().trim();
-                                      fetchdata(_user, _pass);
+                                      username =
+                                          username_.text.toString().trim();
+                                      password =
+                                          password_.text.toString().trim();
+                                      fetchdata(username, password);
 
                                       print("Validated");
                                     } else {
@@ -299,6 +285,43 @@ class _LoginFormValidationState extends State<LoginForm> {
     );
   }
 
+  void addOrUpdateNote() async {
+    final isUpdating = widget.note != null;
+
+    if (isUpdating) {
+      await updateNote();
+    } else {
+      await addNote();
+    }
+  }
+
+  Future updateNote() async {
+    final note = widget.note!.copy(
+      isImportant: isImportant,
+      number: number,
+      api_key: dataResponse['api_key'],
+      api_secret: dataResponse['api_secret'],
+      username: username,
+      password: password,
+    );
+
+    await NotesDatabase.instance.update(note);
+  }
+
+  Future addNote() async {
+    final note = Note(
+      api_key: dataResponse['api_key'],
+      isImportant: true,
+      number: number,
+      api_secret: dataResponse['api_secret'],
+      username: username,
+      password: password,
+      createdTime: DateTime.now(),
+    );
+
+    await NotesDatabase.instance.create(note);
+  }
+
   void fetchdata(x, y) async {
     var headers = {
       'Content-Type': 'application/json',
@@ -319,23 +342,15 @@ class _LoginFormValidationState extends State<LoginForm> {
       Mapresponse = await json.decode(res);
       dataResponse = Mapresponse['login'];
       print(dataResponse['role']);
-      final transaction = Transaction()
-        ..api_key = dataResponse['api_key']
-        ..api_secret = dataResponse['api_secret']
-        ..Username = x
-        ..Password = y;
 
-      final box = Boxes.getTransactions();
-      box.add(transaction);
-      Navigator.of(context).pushNamed(TransactionPage.routeName).
-          //   HomePage.routeName, arguments: {
-          //   "Api_key": dataResponse['api_key'],
-          //   "Api_secret": dataResponse['api_secret'],
-          //   "Username": x
-          // }).
-          then((result) async {
+      Navigator.of(context).pushNamed(HomePage.routeName, arguments: {
+        "Api_key": dataResponse['api_key'],
+        "Api_secret": dataResponse['api_secret'],
+        "Username": x
+      }).then((result) async {
         print(result);
       });
+      addOrUpdateNote();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: Colors.black26,
