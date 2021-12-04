@@ -10,6 +10,9 @@ class itemdetails extends StatefulWidget {
 class myitemdetails extends State<itemdetails> {
   @override
   Widget build(BuildContext context) {
+    final routes =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    List lis = routes['name'];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue.shade300,
@@ -70,14 +73,14 @@ class myitemdetails extends State<itemdetails> {
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             40, 0, 0, 0),
-                                        child: Text("Velvet Pant",
+                                        child: Text(lis[0]['salespoint_name'],
                                             style: TextStyle(fontSize: 22)),
                                       )),
                                   Row(
                                     children: [
                                       Text("Item Name : ",
                                           style: TextStyle(fontSize: 19)),
-                                      Text("Velvet Pant ",
+                                      Text(lis[0]['salespoint_name'],
                                           style: TextStyle(fontSize: 19))
                                     ],
                                   ),
@@ -88,21 +91,12 @@ class myitemdetails extends State<itemdetails> {
                                     children: [
                                       Text("Item Number : ",
                                           style: TextStyle(fontSize: 19)),
-                                      Text("1056",
+                                      Text(lis[0]['name'],
                                           style: TextStyle(fontSize: 19))
                                     ],
                                   ),
                                   SizedBox(
                                     height: 10,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text("Quantity : ",
-                                          style: TextStyle(fontSize: 19)),
-                                      Text(
-                                          " Red - 120\n Yellow - 30 \n Black - 100 \n Green - 50",
-                                          style: TextStyle(fontSize: 19))
-                                    ],
                                   ),
                                   SizedBox(
                                     height: 10,
@@ -111,7 +105,7 @@ class myitemdetails extends State<itemdetails> {
                                     children: [
                                       Text("Ordered Date : ",
                                           style: TextStyle(fontSize: 19)),
-                                      Text("6 - 4 - 2021",
+                                      Text(lis[0]['date'],
                                           style: TextStyle(fontSize: 19))
                                     ],
                                   ),
@@ -120,9 +114,9 @@ class myitemdetails extends State<itemdetails> {
                                   ),
                                   Row(
                                     children: [
-                                      Text("Issued Date : ",
+                                      Text("Payment Due Date : ",
                                           style: TextStyle(fontSize: 19)),
-                                      Text("10 - 4 - 2021",
+                                      Text(lis[0]['payment_due_date'],
                                           style: TextStyle(fontSize: 19))
                                     ],
                                   ),
@@ -133,7 +127,7 @@ class myitemdetails extends State<itemdetails> {
                                     children: [
                                       Text("Total Amount : ",
                                           style: TextStyle(fontSize: 19)),
-                                      Text("\₹ 10500",
+                                      Text("\₹" + lis[0]['total'].toString(),
                                           style: TextStyle(fontSize: 19))
                                     ],
                                   ),
@@ -142,22 +136,16 @@ class myitemdetails extends State<itemdetails> {
                                   ),
                                   Row(
                                     children: [
-                                      Text("Amount Received : ",
+                                      Text("Outstanding : ",
                                           style: TextStyle(fontSize: 19)),
-                                      Text("\₹ 10000",
+                                      Text(
+                                          "\₹" +
+                                              lis[0]['outstanding'].toString(),
                                           style: TextStyle(fontSize: 19))
                                     ],
                                   ),
                                   SizedBox(
                                     height: 10,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text("Balance Amount : ",
-                                          style: TextStyle(fontSize: 19)),
-                                      Text("\₹ 500",
-                                          style: TextStyle(fontSize: 19))
-                                    ],
                                   ),
                                   SizedBox(
                                     height: 10,

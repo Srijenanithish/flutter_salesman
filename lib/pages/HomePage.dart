@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'dart:io'; //InternetAddress utility
 import 'dart:async'; //For StreamController/Stream
-
-import 'package:flutter_salesman/db/data_helper.dart';
 import 'package:flutter_salesman/db/database_helper.dart';
 import 'package:flutter_salesman/model/data.dart';
-import 'package:flutter_salesman/model/details.dart';
+
 import 'package:sqflite/sqflite.dart';
 
 import 'LoginForm.dart';
@@ -25,11 +23,6 @@ import 'package:intl/intl.dart';
 void main() => runApp(HomePage());
 
 class HomePage extends StatefulWidget {
-  final Detail? detail;
-  const HomePage({
-    Key? key,
-    this.detail,
-  }) : super(key: key);
   static const String routeName = "/home";
   MyHomePage createState() => MyHomePage();
 }
@@ -380,12 +373,6 @@ class MyHomePage extends State<HomePage> {
     });
   }
 
-  Future addNote() async {
-    final detail = Detail();
-
-    await DetailsDatabase.instance.create(detail);
-  }
-
   fetchparty(x, y, z) async {
     var headers = {
       'Authorization': 'token ' + x + ':' + y,
@@ -409,7 +396,6 @@ class MyHomePage extends State<HomePage> {
       var res = await response.stream.bytesToString();
       Mapresponse = await json.decode(res);
       print(Mapresponse);
-      addNote();
     } else {
       print(response.reasonPhrase);
     }
@@ -687,7 +673,8 @@ class MyHomePage extends State<HomePage> {
             "Territory_Name": name,
             "lat": _currentPosition.latitude,
             "lon": _currentPosition.longitude,
-            "ItemSet": Mapresponse['item_details']
+            "ItemSet": Mapresponse['item_details'],
+            "Territory_details": Mapresponse['territory_name'],
           }).then((result) {
             print(result);
           });

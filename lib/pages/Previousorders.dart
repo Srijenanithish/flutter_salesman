@@ -7,29 +7,22 @@ class Previousorders extends StatefulWidget {
 }
 
 class MyPreviousorders extends State<Previousorders> {
-  List<String> PartyList = [
-    '2m Cloth',
-    'velvet pant',
-    'green sweater',
-    'jacket',
-    'woolen coat',
-    'new Kurthis',
-    'jaipur materials'
-  ];
-
-  List<String> Location = [
-    'Palayakad',
-    'VNR Street',
-    'Dharapuram',
-    'Udumalpet',
-    'Palladam',
-    'Kurichi',
-    'Pollachi'
-  ];
   List<String>? PartyListSearch;
 
   @override
   Widget build(BuildContext context) {
+    final routes =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    List l = routes['Territory_details'];
+
+    List<String> PartyList = [];
+    for (var i = 0; i < l.length; i++) {
+      PartyList.add(l[i]['salespoint_name']);
+    }
+    List<String> Location = [];
+    for (var i = 0; i < l.length; i++) {
+      Location.add(l[i]['date']);
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue.shade300,
@@ -57,8 +50,9 @@ class MyPreviousorders extends State<Previousorders> {
                     return InkWell(
                       onTap: () {
                         Navigator.of(context)
-                            .pushNamed(itemdetails.routeName)
-                            .then((result) {
+                            .pushNamed(itemdetails.routeName, arguments: {
+                          "name": [l[index]]
+                        }).then((result) {
                           print(result);
                         });
                       },

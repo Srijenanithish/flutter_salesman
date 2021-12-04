@@ -5,6 +5,7 @@ import 'package:flutter_salesman/pages/Orders.dart';
 import 'package:flutter_salesman/pages/Orders1.dart';
 import 'package:flutter_salesman/pages/Previousorders.dart';
 import 'package:flutter_salesman/pages/Takeorder.dart';
+import 'package:flutter_salesman/pages/Territory.dart';
 import 'package:http/http.dart' as http;
 
 class Party extends StatefulWidget {
@@ -14,6 +15,8 @@ class Party extends StatefulWidget {
 
 class myParty extends State<Party> {
   Map Mapresponse = {};
+  Map Mapresponse_ = {};
+
   @override
   Widget build(BuildContext context) {
     final routes =
@@ -23,6 +26,7 @@ class myParty extends State<Party> {
     double lat = routes['lat'];
     double lon = routes['lon'];
     List Itemset = routes['Itemset'];
+    List Territory_details = routes['Territory_details'];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue.shade300,
@@ -160,7 +164,9 @@ class myParty extends State<Party> {
                                     Navigator.of(context).pushNamed(
                                         Takeorder.routeName,
                                         arguments: {
-                                          "Items": Itemset
+                                          "Items": Itemset,
+                                          "Customer_name": lis[0]
+                                              ['customer_name'],
                                         }).then((result) {
                                       print(result);
                                     });
@@ -226,19 +232,12 @@ class myParty extends State<Party> {
                                 width: 300,
                                 child: RaisedButton(
                                   onPressed: () {
-                                    fetchLocation(lat, lon);
+                                    fetchPreviousOrders(Territory_details);
                                     // showDialog(
                                     //   context: context,
                                     //   builder: (BuildContext context) =>
                                     //       _buildPopupDialog(context),
                                     // );
-                                    Navigator.of(context).pushNamed(
-                                        Previousorders.routeName,
-                                        arguments: {
-                                          "Items": Itemset
-                                        }).then((result) {
-                                      print(result);
-                                    });
                                   },
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
@@ -336,6 +335,35 @@ class myParty extends State<Party> {
     );
   }
 
+  fetchPreviousOrders(Territory_details) async {
+    var headers = {
+      'Content-Type': 'application/json',
+      'Cookie':
+          'full_name=Guest; sid=Guest; system_user=no; user_id=Guest; user_image='
+    };
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+            'http://192.168.0.109:8000/api/method/salesman.api.previous_sales_point_invoice'));
+    request.body = json.encode({"territory": Territory_details});
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var res = await response.stream.bytesToString();
+      Mapresponse_ = await json.decode(res);
+
+      Navigator.of(context).pushNamed(Previousorders.routeName, arguments: {
+        "Territory_details": Mapresponse_['message'],
+      }).then((result) {
+        print(result);
+      });
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
   fetchLocation(lat, lon) async {
     var headers = {'Content-Type': 'application/json', 'Cookie': 'sid=Guest'};
     var request = http.Request(
@@ -348,9 +376,6 @@ class myParty extends State<Party> {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      var res = await response.stream.bytesToString();
-      Mapresponse = await json.decode(res);
-      print(Mapresponse);
     } else {
       print(response.reasonPhrase);
     }

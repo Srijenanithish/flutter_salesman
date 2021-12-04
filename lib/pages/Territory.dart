@@ -34,7 +34,7 @@ class MyTerritory extends State<Territory> {
   Widget build(BuildContext context) {
     final routes =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-
+    List Territory_details = routes['Territory_details'];
     List l = routes['Store_details'];
     String tet = routes['Territory_Name'];
     double lat = routes['lat'];
@@ -122,7 +122,8 @@ class MyTerritory extends State<Territory> {
                           "Territory_Name-": routes['Territory_Name'],
                           "lat": lat,
                           "lon": lon,
-                          "Itemset": item_set
+                          "Itemset": item_set,
+                          "Territory_details": Territory_details,
                         }).then((result) {
                           print(result);
                         });

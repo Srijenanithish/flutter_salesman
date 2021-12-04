@@ -10,9 +10,11 @@ class Takeorder extends StatefulWidget {
 }
 
 TextEditingController Quantity = TextEditingController();
+
 var returnData = {};
 
 class MyTakeorder extends State<Takeorder> {
+  Map Mapres = {};
   @override
   bool _hasBeenPressed = true;
   Widget build(BuildContext context) {
@@ -22,15 +24,13 @@ class MyTakeorder extends State<Takeorder> {
     final routes =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     List items = routes['Items'];
+    String Customer_name = routes['Customer_name'];
+
     for (var i = 0; i < items.length; i++) {
       PartyList.add(items[i][0]['item_name']);
       Location.add(items[i][0]['price_rate']);
     }
-    print(PartyList);
-    print(returnData);
-    // final routes =
-    //     ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    // String Item_name = routes['Item_name'];
+
     String Rupees = routes['Rupees'];
     return Scaffold(
       appBar: AppBar(
@@ -145,9 +145,9 @@ class MyTakeorder extends State<Takeorder> {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) =>
-                                          _buildPopupDialog(context),
+                                          _buildPopupDialog(context, returnData,
+                                              Customer_name),
                                     );
-                                    salesorder(returnData);
                                   },
                                   shape: RoundedRectangleBorder(
                                       borderRadius:
@@ -209,17 +209,29 @@ class MyTakeorder extends State<Takeorder> {
     );
   }
 
-  Future salesorder(returnData) async {
-    var headers = {'Content-Type': 'application/json'};
-    var request = http.Request('POST',
-        Uri.parse('localhost:8000/api/method/salesman.api.sales_point_order'));
-    request.body = ''' "args" : {$returnData }''';
+  Future salesorder(returnData, Customer_name) async {
+    var headers = {'Content-Type': 'application/json', 'Cookie': 'sid=Guest'};
+    var request = http.Request(
+        'POST',
+        Uri.parse(
+            'http://test-sfa.aerele.in/api/method/salesman.api.sales_point_order'));
+    request.body = json.encode({"customer_name": Customer_name});
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
+      var res = await response.stream.bytesToString();
+      Mapres = await json.decode(res);
+      print(Mapres["message"]);
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.black26,
+        content: Text(
+          "Your Order is Taken !",
+          style: TextStyle(color: Colors.white),
+        ),
+      ));
     } else {
       print(response.reasonPhrase);
     }
@@ -300,33 +312,34 @@ class MyTakeorder extends State<Takeorder> {
                       ])
                     ]))));
   }
-}
 
-Widget _buildPopupDialog(BuildContext context) {
-  return new AlertDialog(
-    title: const Text('Confirm Your Order'),
-    content: new Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text("By Clicking Yes"),
+  Widget _buildPopupDialog(BuildContext context, returndata, cus_name) {
+    return new AlertDialog(
+      title: const Text('Confirm Your Order'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("By Clicking Yes"),
+        ],
+      ),
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('No', style: TextStyle(fontSize: 18)),
+        ),
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop(context);
+            salesorder(returnData, cus_name);
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('Yes', style: TextStyle(fontSize: 18)),
+        ),
       ],
-    ),
-    actions: <Widget>[
-      new FlatButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        textColor: Theme.of(context).primaryColor,
-        child: const Text('No', style: TextStyle(fontSize: 18)),
-      ),
-      new FlatButton(
-        onPressed: () {
-          Navigator.of(context).pop(context);
-        },
-        textColor: Theme.of(context).primaryColor,
-        child: const Text('Yes', style: TextStyle(fontSize: 18)),
-      ),
-    ],
-  );
+    );
+  }
 }
