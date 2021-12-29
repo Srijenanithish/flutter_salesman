@@ -93,7 +93,6 @@ class MyHomePage extends State<HomePage> {
         child: Stack(children: <Widget>[
           Column(
             children: [
-              Text(details.length.toString()),
               Container(
                 height: MediaQuery.of(context).size.height * 0.3,
                 width: MediaQuery.of(context).size.width,
@@ -783,7 +782,7 @@ class MyHomePage extends State<HomePage> {
 
   Widget _CheckedinAlready(BuildContext context) {
     return new AlertDialog(
-      title: Center(child: const Text('You have Already Checked In')),
+      title: Center(child: const Text('You are not in the Range Please Check')),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(32.0))),
       contentPadding: EdgeInsets.only(top: 10.0),

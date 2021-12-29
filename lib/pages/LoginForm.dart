@@ -153,6 +153,7 @@ class _LoginFormValidationState extends State<LoginForm> {
                                         isDense: true,
                                         fillColor: Colors.black12,
                                         labelText: 'Username',
+                                        //786007
                                         hintText: 'Enter your Username'),
                                     validator: MultiValidator([
                                       RequiredValidator(

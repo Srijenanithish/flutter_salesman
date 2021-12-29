@@ -73,12 +73,12 @@ class myitemdetails extends State<itemdetails> {
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                             40, 0, 0, 0),
-                                        child: Text(lis[0]['salespoint_name'],
+                                        child: Text(lis[0]['name'],
                                             style: TextStyle(fontSize: 22)),
                                       )),
                                   Row(
                                     children: [
-                                      Text("Item Name : ",
+                                      Text("Holder Name : ",
                                           style: TextStyle(fontSize: 19)),
                                       Text(lis[0]['salespoint_name'],
                                           style: TextStyle(fontSize: 19))
@@ -89,7 +89,7 @@ class myitemdetails extends State<itemdetails> {
                                   ),
                                   Row(
                                     children: [
-                                      Text("Item Number : ",
+                                      Text("Item Name : ",
                                           style: TextStyle(fontSize: 19)),
                                       Text(lis[0]['name'],
                                           style: TextStyle(fontSize: 19))

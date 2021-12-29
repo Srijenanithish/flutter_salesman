@@ -344,7 +344,7 @@ class myParty extends State<Party> {
     var request = http.Request(
         'GET',
         Uri.parse(
-            'http://192.168.0.109:8000/api/method/salesman.api.previous_sales_point_invoice'));
+            'http://test-sfa.aerele.in/api/method/salesman.api.previous_sales_point_invoice'));
     request.body = json.encode({"territory": Territory_details});
     request.headers.addAll(headers);
 

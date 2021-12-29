@@ -17,7 +17,7 @@ class MyPreviousorders extends State<Previousorders> {
 
     List<String> PartyList = [];
     for (var i = 0; i < l.length; i++) {
-      PartyList.add(l[i]['salespoint_name']);
+      PartyList.add(l[i]['name']);
     }
     List<String> Location = [];
     for (var i = 0; i < l.length; i++) {
